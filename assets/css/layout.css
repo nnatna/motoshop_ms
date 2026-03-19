@@ -1,0 +1,33 @@
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f4f6f9;
+}
+.main-wrapper {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+.sidebar-wrapper {
+    width: 280px;
+    background-color: #fff;
+    border-right: 1px solid #dee2e6;
+    transition: all 0.3s;
+}
+.content-wrapper {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+}
+@media (max-width: 768px) {
+    .sidebar-wrapper {
+        position: absolute;
+        z-index: 1000;
+        height: 100%;
+        left: -280px;
+    }
+    .sidebar-wrapper.show {
+        left: 0;
+    }
+}
