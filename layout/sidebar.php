@@ -10,22 +10,22 @@
             </a>
         </li>
         <li class="nav-item mb-1">
-            <a href="#" class="nav-link text-dark rounded hover-bg-light">
+            <a href="motos.php" class="nav-link text-dark rounded hover-bg-light">
                 <i class="bi bi-people me-2"></i> Motos
             </a>
         </li>
         <li class="nav-item mb-1">
-            <a href="./customers/list.php" class="nav-link text-dark rounded hover-bg-light">
+            <a href="customer.php" class="nav-link text-dark rounded hover-bg-light">
                 <i class="bi bi-box-seam me-2"></i> Customer
             </a>
         </li>
         <li class="nav-item mb-1">
-            <a href="#" class="nav-link text-dark rounded hover-bg-light">
+            <a href="sales.php" class="nav-link text-dark rounded hover-bg-light">
                 <i class="bi bi-receipt me-2"></i> Sales
             </a>
         </li>
         <li class="nav-item mb-1">
-            <a href="#" class="nav-link text-dark rounded hover-bg-light">
+            <a href="user.php" class="nav-link text-dark rounded hover-bg-light">
                 <i class="bi bi-receipt me-2"></i> User
             </a>
         </li>

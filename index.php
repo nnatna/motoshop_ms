@@ -62,8 +62,7 @@
                 </div>
             </div>
         </main>
-    </div>
-
+    </div
     <?php 
     include 'layout/footer.php'; 
     ?>

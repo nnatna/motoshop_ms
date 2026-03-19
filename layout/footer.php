@@ -3,7 +3,7 @@
     <div class="container-fluid px-4 text-center text-md-start">
         <div class="row align-items-center">
             <div class="col-md-6 text-muted small">
-                &copy; <?php echo date("Y"); ?> AppManager Framework. All rights reserved.
+                &copy; <?php echo date("Y"); ?> Motoshop_Managerment_System@2026
             </div>
             <div class="col-md-6 text-md-end mt-2 mt-md-0">
                 <a href="#" class="text-decoration-none text-muted small me-3">Privacy Policy</a>
