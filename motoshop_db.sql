@@ -12,7 +12,7 @@ CREATE TABLE users (
 CREATE TABLE tblCustomers (
     cusid INT PRIMARY KEY AUTO_INCREMENT,
     cusname VARCHAR(100) NOT NULL,
-    gender VARCHAR(10,
+    gender VARCHAR(10),
     phone VARCHAR(20) UNIQUE,
     address VARCHAR(100)
 );
@@ -23,24 +23,25 @@ CREATE TABLE tblBrand (
 );
 
 CREATE TABLE tblModel (
-    modid INT PRIMARY KEY AUTO_INCREMENT,
+    code_model INT PRIMARY KEY AUTO_INCREMENT,
+    braid INT,
     modname VARCHAR(100) NOT NULL,
     color VARCHAR(100) NOT NULL,
-    braid INT,
+    yearmade YEAR NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     stock INT DEFAULT 0,
     FOREIGN KEY (braid) REFERENCES tblBrand(braid)
-);
+)AUTO_INCREMENT=1000001;
 
 CREATE TABLE tblSales (
     saleid INT PRIMARY KEY AUTO_INCREMENT,
     cusid INT,
-    modid INT,
+    code_model INT,
     quantity INT NOT NULL,
     amount DECIMAL(10, 2),
     saledate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (cusid) REFERENCES tblCustomers(cusid),
-    FOREIGN KEY (modid) REFERENCES tblModel(modid)
+    FOREIGN KEY (modid) REFERENCES tblModel(code_model)
 ) AUTO_INCREMENT=1001;
 
 INSERT INTO users (username, password_user, full_name, role) VALUES
@@ -56,14 +57,14 @@ INSERT INTO tblBrand (braname) VALUES
 SELECT * FROM tblBrand;
 
 
-INSERT INTO tblModel (modname, color, braid, price, stock) VALUES
-('Wave 110i',   'Red',    1, 1350.00, 5),
-('Click 125i',  'Blue',   1, 1800.00, 3),
-('PCX 150',     'Silver', 1, 3200.00, 2),
-('Exciter 150', 'Black',  2, 2200.00, 4),
-('NMAX 155',    'White',  2, 2800.00, 2),
-('Raider R150', 'Orange', 3, 2100.00, 3),
-('Duke 200',    'Black',  4, 4500.00, 1);
+INSERT INTO tblModel (braid ,modname, color, yearmade, price, stock) VALUES
+(1, 'Wave 110i',   'Red',    2020, 1350.00, 5),
+(1, 'Click 125i',  'Blue',   2023, 1800.00, 3),
+(1, 'PCX 150',     'Silver', 2025, 3200.00, 2),
+(2, 'Exciter 150', 'Black',  2024, 2200.00, 4),
+(2, 'NMAX 155',    'White',  2019, 2800.00, 2),
+(3, 'Raider R150', 'Orange', 2017, 2100.00, 3),
+(4, 'Duke 200',    'Black',  2026, 4500.00, 1);
 SELECT * FROM tblModel;
 
 INSERT INTO tblCustomers (cusname, gender, phone, address) 
@@ -89,12 +90,13 @@ SELECT
     b.braname,
     m.modname,
     m.color,
+    m.yearmade,
     s.quantity,
     s.amount,
     s.saledate
 FROM tblSales s                                  
 JOIN tblCustomers c ON s.cusid  = c.cusid        
-JOIN tblModel     m ON s.modid  = m.modid        
+JOIN tblModel     m ON s.code_model  = m.code_model        
 JOIN tblBrand     b ON m.braid  = b.braid;       
 
 SELECT * FROM vsales;
