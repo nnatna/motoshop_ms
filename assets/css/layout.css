@@ -14,6 +14,8 @@ body {
     background-color: #fff;
     border-right: 1px solid #dee2e6;
     transition: all 0.3s;
+    min-height: 100%;
+    overflow-y: auto;
 }
 .content-wrapper {
     flex: 1;
@@ -23,11 +25,19 @@ body {
 @media (max-width: 768px) {
     .sidebar-wrapper {
         position: absolute;
+        top: 0;
         z-index: 1000;
         height: 100%;
         left: -280px;
+        max-height: 100vh;
+        background-color: #fff;
+        overflow-y: auto;
     }
     .sidebar-wrapper.show {
-        left: 0;
+        left: 0 !important;
+    }
+    /* Extra safety: some pages may render different class orders */
+    #sidebar.show {
+        left: 0 !important;
     }
 }

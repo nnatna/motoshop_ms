@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./assets/css/layout.css">
 </head>
+
 <body>
     <?php include 'layout/header.php'; ?>
     <div class="main-wrapper">
@@ -16,7 +18,8 @@
         <main class="content-wrapper">
             
         </main>
-    </div
-    <?php include 'layout/footer.php';?>
+    </div>
+    <?php include 'layout/footer.php'; ?>
 </body>
+
 </html>

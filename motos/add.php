@@ -1,42 +1,93 @@
-<!-- <?php
-include '../db_connect.php';
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $brand = $_POST['brand'];
-    $model = $_POST['model'];
-    $chassis = $_POST['chassis_number'];
-    $year = $_POST['year_made'];
-    $price = $_POST['price'];
-
-    $sql = "INSERT INTO motos (brand, model, chassis_number, year_made, price, status) 
-            VALUES ('$brand', '$model', '$chassis', '$year', '$price', 'Available')";
-    if ($conn->query($sql)) { header("Location: list.php"); }
-}
-?> -->
 <!DOCTYPE html>
-<html lang="km">
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>បន្ថែមម៉ូតូ</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Motorcycle</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/form.css">
 </head>
-<body class="bg-light">
-<div class="container py-5">
-    <div class="card mx-auto shadow-sm" style="max-width: 600px;">
-        <div class="card-header bg-primary text-white text-center"><h5>បញ្ចូលម៉ូតូថ្មី</h5></div>
-        <div class="card-body p-4">
-            <form method="POST">
-                <div class="mb-3"><label class="form-label">ម៉ាក (Brand)</label><input type="text" name="brand" class="form-control" required></div>
-                <div class="mb-3"><label class="form-label">ម៉ូដែល (Model)</label><input type="text" name="model" class="form-control" required></div>
-                <div class="mb-3"><label class="form-label">លេខតួ (Chassis)</label><input type="text" name="chassis_number" class="form-control" required></div>
-                <div class="row">
-                    <div class="col-6 mb-3"><label class="form-label">ឆ្នាំ</label><input type="number" name="year_made" class="form-control" value="2024"></div>
-                    <div class="col-6 mb-3"><label class="form-label">តម្លៃ ($)</label><input type="number" step="0.01" name="price" class="form-control" required></div>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">រក្សាទុក</button>
-                <a href="list.php" class="btn btn-link w-100 mt-2 text-decoration-none text-muted">បោះបង់</a>
-            </form>
+
+<body>
+    <div class="container bg-light p-0 rounded mt-5 shadow w-25">
+        <div class="bg-dark p-2 text-center m-0 rounded-top">
+            <h3 class="text-center text-light fw-bold">Add New Motorcycle</h3>
         </div>
+        <form method="post" class="p-4">
+            <div class="mb-3">
+                <label for="braid" class="form-label fw-bold">Brand</label>
+                <select class="form-select" id="braid" name="braid" required>
+                    <option value="">--Choose Brand--</option>
+                    <?php
+                    require("../db.php");
+                    $sql = "SELECT * FROM tblBrand";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    while ($row = $result->fetch_assoc()) {
+                        echo ("<option value='" . $row['braid'] . "'>" . $row['braname'] . "</option>");
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="modname" class="form-label fw-bold">Model</label>
+                <input type="text" class="form-control" id="modname" name="modname" placeholder="Enter model name"required>
+            </div>
+            <div class="mb-3">
+                <label for="color" class="form-label fw-bold">Color</label>
+                <input type="text" class="form-control" id="color" name="color" placeholder="Enter name color" required>
+            </div>
+            <div class="mb-3">
+                <label for="year" class="form-label fw-bold">Year</label>
+                <input type="text" class="form-control" id="year" name="year" placeholder="Enter manufacturing year"required>
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label fw-bold">Price</label>
+                <input type="text" class="form-control" id="price" name="price" placeholder="Enter price"required>
+            </div>
+            <div class="mb-3">
+                <label for="Act" class="form-label fw-bold">Action</label>
+                <select name="act" id="act" class="form-select" required>
+                    <option value="">--Choose Action--</option>
+                    <option value="New">New</option>
+                    <option value="Used">Used</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="stock" class="form-label fw-bold">Stock</label>
+                <input type="nember" class="form-control" id="stock" name="stock" placeholder="Enter stock" required>
+            </div>
+
+            <div class="d-flex gap-2 justify-content-start mt-3">
+                <input type="submit" value="Save" name="submit" class="btn btn-primary">
+                <a href="../motos.php" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+        <?php
+            if (isset($_POST["submit"])) {
+                require("../db.php");
+                $braid = $_POST["braid"];
+                $modname = $_POST["modname"];
+                $color = $_POST["color"];
+                $year = $_POST["year"];
+                $price = $_POST["price"];
+                $act = $_POST["act"];
+                $stock = $_POST["stock"];
+                $sql = "INSERT INTO tblMOdel (braid, modname, color, `year`, price, act, stock) 
+                        VALUES(?,?,?,?,?,?,?)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("isssdsi", $braid, $modname, $color, $year, $price, $act, $stock);
+                if ($stmt->execute() == true) {
+                    header("Location: ../motos.php");
+                } else {
+                    echo "Error: " . $sql . "<br>" . $conn->error;
+                }
+            }
+        ?>
     </div>
-</div>
 </body>
 </html>

@@ -1,19 +1,25 @@
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h3><i class="bi bi-receipt-cutoff text-success"></i>Lists Motos</h3>
-    <a href="motos\add.php" class="btn btn-success rounded-pill"><i class="bi-plus-circle"></i> Add New Moto</a>
+<div class="d-flex justify-content-between align-items-center mb-1">
+    <div>
+        <h3 class="fw-bold text-success"><i class="bi bi-receipt-cutoff"></i>Lists Motorcycle</h3>
+        <p class="text-muted">List all motorcycle transactions in the shop</p>
+    </div>
+    <div>
+        <a href="motos\add.php" class="btn btn-success rounded-pill fw-bold"><i class="bi-plus-circle"></i> Brand</a>
+    <a href="motos\add.php" class="btn btn-success rounded-pill fw-bold"><i class="bi-plus-circle"></i> Motorcycle</a>
+    </div>
 </div>
+
 <?php
 $field = isset($_POST["txtfield"]) ? $_POST["txtfield"] : "";
 $search = isset($_POST["txtsearch"]) ? $_POST["txtsearch"] : "";
 $code_model = $field == 1 ? "Selected" : "";
 $braname = $field == 2 ? "Selected" : "";
 $modname = $field == 3 ? "Selected" : "";
-$yearmade = $field == 4 ? "Selected" : "";
+$year = $field == 4 ? "Selected" : "";
 $price = $field == 5 ? "Selected" : "";
-$Act = $field == 6 ? "Selected" : "";
+$act = $field == 6 ? "Selected" : "";
 ?>
 <fieldset>
-    <legend class="text-start fw-bold text-dark mt-2">Lookup</legend>
     <form method="post" class="d-flex justify-content-between mb-3">
         <div class="text-start row g-3 align-items-center">
             <div class="col-auto">
@@ -22,20 +28,35 @@ $Act = $field == 6 ? "Selected" : "";
                     <option value="1" <?php echo ($code_model) ?>>Code</option>
                     <option value="2" <?php echo ($braname) ?>>Brand</option>
                     <option value="3" <?php echo ($modname) ?>>Model</option>
-                    <option value="4" <?php echo ($yearmade) ?>>Year</option>
+                    <option value="4" <?php echo ($year) ?>>Year</option>
                     <option value="5" <?php echo ($price) ?>>Price</option>
-                    <option value="6" <?php echo ($Act) ?>>Action</option>
+                    <option value="6" <?php echo ($act) ?>>Action</option>
                 </select>
             </div>
-            <div class="col-auto d-flex justify-content-between align-items-center gap-1 ">
-                <input type="text" name="txtsearch" value="<?php echo ($search) ?>" class="form-control rounded-pill" placeholder="Search...">
-                <a type="submit" name="btnsearch" value="Search" class='bi-search btn btn-outline-secondary rounded-circle'></a>
-                <a type="submit" name="btnreset" value="Reset" class='bi-arrow-counterclockwise btn btn-danger rounded-circle'></a>
+
+            <div class="col-auto d-flex justify-content-between align-items-center gap-1">
+                <input type="text" name="txtsearch"
+                    value="<?php echo ($search) ?>"
+                    class="form-control rounded-pill" placeholder="Search...">
+
+                <button type="submit" name="btnsearch" class="btn btn-outline-secondary rounded-circle">
+                    <i class="bi-search"></i>
+                </button>
+
+                <button type="submit" name="btnreset" class="btn btn-danger rounded-circle">
+                    <i class="bi-arrow-counterclockwise"></i>
+                </button>
             </div>
         </div>
+
         <div class="text-end">
-            <a type="submit" name="btnasc" value="A-Z" class='bi-sort-alpha-down btn btn-outline-success rounded-circle'></a>
-            <a type="submit" name="btndesc" value="Z-A" class='bi-sort-alpha-up-alt btn btn-outline-danger rounded-circle'></a>
+            <button type="submit" name="btnasc" class="btn btn-outline-success rounded-circle">
+                <i class="bi-sort-alpha-down"></i>
+            </button>
+
+            <button type="submit" name="btndesc" class="btn btn-outline-danger rounded-circle">
+                <i class="bi-sort-alpha-up-alt"></i>
+            </button>
         </div>
     </form>
 </fieldset>
@@ -43,53 +64,131 @@ $Act = $field == 6 ? "Selected" : "";
 
 </div>
 <table id="Table" class="table table-hover text-center align-middle mb-0">
-    <tr class="table-secondary fs-5">
-        <th>Code</th>
-        <th>Brand</th>
-        <th>Model</th>
-        <th>Color</th>
-        <th>Year</th>
-        <th>Price</th>
-        <th>Action</th>
-        <th>Stock</th>
-        <th class="text-center">Options</th>
-    </tr>
-    <?php
-    require("db.php");
-    $sql = "SELECT m.code_model, b.braname, m.modname, m.color, m.yearmade, m.price, m.Act, m.stock 
-                            FROM tblModel m 
-                            JOIN tblBrand b ON m.braid = b.braid";
-    $result = $conn->query($sql);
-    while ($row = $result->fetch_assoc()) {
-        echo "<tr class='aling-middle'>";
-        echo "<td>" . $row["code_model"] . "</td>";
-        echo "<td>" . $row["braname"] . "</td>";
-        echo "<td>" . $row["modname"] . "</td>";
-        echo "<td>" . $row["color"] . "</td>";
-        echo "<td>" . $row["yearmade"] . "</td>";
-        echo "<td>$" . number_format($row["price"], 2) . "</td>";
-        echo "<td class='text-center'>" . $row["Act"] . "</td>";
-        echo "<td>" . $row["stock"] . "</td>";
+    <thead>
+        <tr class="table-secondary fs-5">
+            <th>Code</th>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>Color</th>
+            <th>Year</th>
+            <th>Price</th>
+            <th>Action</th>
+            <th>Stock</th>
+            <th class="text-center">Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        require("db.php");
 
-        echo "<td class='text-center'>
-        <a href='EditModel.php?code_model=" . $row["code_model"] . "' class='bi bi-pencil-square btn btn-outline-primary rounded-circle'></a>
-        <a href='DeleteModel.php?code_model=" . $row["code_model"] . "' class='bi bi-trash btn btn-outline-danger rounded-circle' onclick='return confirm(\"Are you sure you want to delete this model?\");'></a>
-                        </td>";
-        echo "</tr>";
-    }
-    ?>
+        $limit = 10;
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $start = ($page - 1) * $limit;
+        $total_results = $conn->query("SELECT COUNT(*) as id FROM tblModel")->fetch_assoc()['id'];
+        $pages = ceil($total_results / $limit);
+        $sql = "SELECT m.code_model, b.braname, m.modname, m.color, m.year, m.price, m.act, m.stock 
+        FROM tblModel m 
+        JOIN tblBrand b ON m.braid = b.braid";
+        //search
+        if (isset($_POST['btnsearch'])) {
+            $field = $_POST['txtfield'];
+            $text = $_POST['txtsearch'];
+            switch ($field) {
+                case '1':
+                    $sql .= " WHERE m.code_model LIKE '%$text%'";
+                    break;
+                case '2':
+                    $sql .= " WHERE b.braname LIKE '%$text%'";
+                    break;
+                case '3':
+                    $sql .= " WHERE m.modname LIKE '%$text%'";
+                    break;
+                case '4':
+                    $sql .= " WHERE m.year LIKE '%$text%'";
+                    break;
+                case '5':
+                    $sql .= " WHERE m.price LIKE '%$text%'";
+                    break;
+                case '6':
+                    $sql .= " WHERE m.act LIKE '%$text%'";
+                    break;
+            }
+        }
+        //sort asc
+        if (isset($_POST['btnasc'])) {
+            $field = $_POST['txtfield'];
+            switch ($field) {
+                case '1':
+                    $sql .= " ORDER BY m.code_model ASC";
+                    break;
+                case '2':
+                    $sql .= " ORDER BY b.braname ASC";
+                    break;
+                case '3':
+                    $sql .= " ORDER BY m.modname ASC";
+                    break;
+                case '4':
+                    $sql .= " ORDER BY m.year ASC";
+                    break;
+                case '5':
+                    $sql .= " ORDER BY m.price ASC";
+                    break;
+                case '6':
+                    $sql .= " ORDER BY m.act ASC";
+                    break;
+            }
+        }
+        //sort desc
+        if (isset($_POST['btndesc'])) {
+            $field = $_POST['txtfield'];
+            switch ($field) {
+                case '1':
+                    $sql .= " ORDER BY m.code_model DESC";
+                    break;
+                case '2':
+                    $sql .= " ORDER BY b.braname DESC";
+                    break;
+                case '3':
+                    $sql .= " ORDER BY m.modname DESC";
+                    break;
+                case '4':
+                    $sql .= " ORDER BY m.year DESC";
+                    break;
+                case '5':
+                    $sql .= " ORDER BY m.price DESC";
+                    break;
+                case '6':
+                    $sql .= " ORDER BY m.act DESC";
+                    break;
+            }
+        }
+
+        $sql .= " LIMIT $start, $limit";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr>";
+            echo "<td>" . $row["code_model"] . "</td>";
+            echo "<td>" . $row["braname"] . "</td>";
+            echo "<td>" . $row["modname"] . "</td>";
+            echo "<td>" . $row["color"] . "</td>";
+            echo "<td>" . $row["year"] . "</td>";
+            echo "<td>$" . number_format($row["price"], 2) . "</td>";
+            echo "<td>" . $row["act"] . "</td>";
+            echo "<td>" . $row["stock"] . "</td>";
+            echo "<td class='text-center'>
+            <a href='./motos/edit.php?code_model=" . $row["code_model"] . "' class='bi bi-pencil-square btn btn-outline-primary rounded-circle'></a>
+            <a href='./motos/delete.php?code_model=" . $row["code_model"] . "' class='bi bi-trash btn btn-outline-danger rounded-circle' onclick='return confirm(\"Are you sure?\");'></a>
+          </td>";
+            echo "</tr>";
+        }
+        ?>
+    </tbody>
 </table>
-
+<?php include 'layout/Pagination.php'; ?>
 
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $('#salesTable').DataTable({
-            "order": [
-                [0, "desc"]
-            ]
-        });
-    });
-</script>

@@ -1,65 +1,98 @@
-
-<!DOCTYPE html>
-<html lang="km">
-<head>
-    <meta charset="UTF-8">
-    <title>ប្រវត្តិលក់ | MotoShop</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <style>body { font-family: 'Kantumruy Pro', sans-serif; background-color: #f4f7f6; }</style>
-</head>
-<body>
-<div class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3><i class="bi bi-receipt-cutoff text-success"></i> ប្រវត្តិការលក់</h3>
-        <a href="add.php" class="btn btn-success"><i class="bi bi-cart-plus"></i> លក់ម៉ូតូថ្មី</a>
-    </div>
-
-    <div class="card shadow-sm border-0">
-        <div class="card-body">
-            <table id="salesTable" class="table table-hover align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th>កាលបរិច្ឆេទ</th>
-                        <th>អតិថិជន</th>
-                        <th>ម៉ូតូ</th>
-                        <th>តម្លៃសរុប</th>
-                        <th>ការបង់ប្រាក់</th>
-                        <th class="text-center">សកម្មភាព</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- <?php
-                    $sql = "SELECT sales.*, customers.name, motos.brand, motos.model 
-                            FROM sales 
-                            JOIN customers ON sales.customer_id = customers.id 
-                            JOIN motos ON sales.moto_id = motos.id 
-                            ORDER BY sales.id DESC";
-                    $result = $conn->query($sql);
-                    while($row = $result->fetch_assoc()):
-                    ?> -->
-                    <tr>
-                        <td><?php echo date('d-m-Y H:i', strtotime($row['sale_date'])); ?></td>
-                        <td class="fw-bold"><?php echo $row['name']; ?></td>
-                        <td><?php echo $row['brand'] . " " . $row['model']; ?></td>
-                        <td class="text-danger fw-bold">$<?php echo number_format($row['total_amount'], 2); ?></td>
-                        <td><span class="badge bg-info text-dark"><?php echo $row['payment_method']; ?></span></td>
-                        <td class="text-center">
-                            <a href="edit.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
-                            <a href="delete.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('លុបការលក់នេះ?')"><i class="bi bi-trash"></i></a>
-                        </td>
-                    </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3><i class="bi bi-receipt-cutoff text-success"></i>Lists Motos</h3>
+    <a href="motos\add.php" class="btn btn-success rounded-pill"><i class="bi-plus-circle"></i> Add New Moto</a>
 </div>
+<?php
+$field = isset($_POST["txtfield"]) ? $_POST["txtfield"] : "";
+$search = isset($_POST["txtsearch"]) ? $_POST["txtsearch"] : "";
+$code_model = $field == 1 ? "Selected" : "";
+$braname = $field == 2 ? "Selected" : "";
+$modname = $field == 3 ? "Selected" : "";
+$yearmade = $field == 4 ? "Selected" : "";
+$price = $field == 5 ? "Selected" : "";
+$Act = $field == 6 ? "Selected" : "";
+?>
+<fieldset>
+    <legend class="text-start fw-bold text-dark mt-2">Lookup</legend>
+    <form method="post" class="d-flex justify-content-between mb-3">
+        <div class="text-start row g-3 align-items-center">
+            <div class="col-auto">
+                <select name="txtfield" class="form-select rounded-pill">
+                    <option class="text-secondary">Choose field</option>
+                    <option value="1" <?php echo ($code_model) ?>>Code</option>
+                    <option value="2" <?php echo ($braname) ?>>Brand</option>
+                    <option value="3" <?php echo ($modname) ?>>Model</option>
+                    <option value="4" <?php echo ($yearmade) ?>>Year</option>
+                    <option value="5" <?php echo ($price) ?>>Price</option>
+                    <option value="6" <?php echo ($Act) ?>>Action</option>
+                </select>
+            </div>
+            <div class="col-auto d-flex justify-content-between align-items-center gap-1 ">
+                <input type="text" name="txtsearch" value="<?php echo ($search) ?>" class="form-control rounded-pill" placeholder="Search...">
+                <a type="submit" name="btnsearch" value="Search" class='bi-search btn btn-outline-secondary rounded-circle'></a>
+                <a type="submit" name="btnreset" value="Reset" class='bi-arrow-counterclockwise btn btn-danger rounded-circle'></a>
+            </div>
+        </div>
+        <div class="text-end">
+            <a type="submit" name="btnasc" value="A-Z" class='bi-sort-alpha-down btn btn-outline-success rounded-circle'></a>
+            <a type="submit" name="btndesc" value="Z-A" class='bi-sort-alpha-up-alt btn btn-outline-danger rounded-circle'></a>
+        </div>
+    </form>
+</fieldset>
+<div>
+
+</div>
+<table id="Table" class="table table-hover text-center align-middle mb-0">
+    <thead>
+        <tr class="table-secondary fs-5">
+            <th>Code</th>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>Color</th>
+            <th>Year</th>
+            <th>Price</th>
+            <th>Action</th>
+            <th>Stock</th>
+            <th class="text-center">Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        require("db.php");
+        $sql = "SELECT m.code_model, b.braname, m.modname, m.color, m.yearmade, m.price, m.Act, m.stock 
+                            FROM tblModel m 
+                            JOIN tblBrand b ON m.braid = b.braid";
+        $result = $conn->query($sql);
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr class='aling-middle'>";
+            echo "<td>" . $row["code_model"] . "</td>";
+            echo "<td>" . $row["braname"] . "</td>";
+            echo "<td>" . $row["modname"] . "</td>";
+            echo "<td>" . $row["color"] . "</td>";
+            echo "<td>" . $row["yearmade"] . "</td>";
+            echo "<td>$" . number_format($row["price"], 2) . "</td>";
+            echo "<td class='text-center'>" . $row["Act"] . "</td>";
+            echo "<td>" . $row["stock"] . "</td>";
+            echo "<td class='text-center'>
+        <a href='EditModel.php?code_model=" . $row["code_model"] . "' class='bi bi-pencil-square btn btn-outline-primary rounded-circle'></a>
+        <a href='DeleteModel.php?code_model=" . $row["code_model"] . "' class='bi bi-trash btn btn-outline-danger rounded-circle' onclick='return confirm(\"Are you sure you want to delete this model?\");'></a>
+                        </td>";
+            echo "</tr>";
+        }
+        ?>
+    </tbody>
+</table>
+
 
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-<script>$(document).ready(function() { $('#salesTable').DataTable({ "order": [[0, "desc"]] }); });</script>
-</body>
-</html>
+<script>
+    $(document).ready(function() {
+        $('#salesTable').DataTable({
+            "order": [
+                [0, "desc"]
+            ]
+        });
+    });
+</script>

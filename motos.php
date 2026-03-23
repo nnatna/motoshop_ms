@@ -16,7 +16,7 @@
         <main class="content-wrapper">
             <?php include 'motos/list.php'; ?>
         </main>
-    </div
+    </div>
     <?php include 'layout/footer.php';?>
 </body>
 </html>
