@@ -36,7 +36,6 @@ body {
     .sidebar-wrapper.show {
         left: 0 !important;
     }
-    /* Extra safety: some pages may render different class orders */
     #sidebar.show {
         left: 0 !important;
     }

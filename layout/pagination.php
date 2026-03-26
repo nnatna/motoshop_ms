@@ -1,7 +1,7 @@
-<nav aria-label="Page navigation" class="mt-4 text-center">
-    <ul class="pagination justify-content-center pagination-dark p-2 rounded">
+<nav aria-label="Page navigation example" class="mt-4 text-center">
+    <ul class="pagination justify-content-center pagination-dark pagination-sm">
         <li class="page-item <?php if($page <= 1){ echo 'disabled'; } ?>">
-            <a class="page-link bg-dark text-white border-secondary" href="<?php if($page > 1){ echo "?page=".($page - 1); } else { echo "#"; } ?>">Previous</a>
+            <a class="page-link bg-dark text-white border-secondary rounded-start-pill" href="<?php if($page > 1){ echo "?page=".($page - 1); } else { echo "#"; } ?>">Previous</a>
         </li>
         <?php for($i = 1; $i <= $pages; $i++): ?>
         <li class="page-item <?php if($page == $i) { echo 'active'; } ?>">
@@ -9,7 +9,7 @@
         </li>
         <?php endfor; ?>
         <li class="page-item <?php if($page >= $pages){ echo 'disabled'; } ?>">
-            <a class="page-link bg-dark text-white border-secondary" href="<?php if($page < $pages){ echo "?page=".($page + 1); } else { echo "#"; } ?>">Next</a>
+            <a class="page-link bg-dark text-white border-secondary rounded-end-pill" href="<?php if($page < $pages){ echo "?page=".($page + 1); } else { echo "#"; } ?>">Next</a>
         </li>
     </ul>
 </nav>

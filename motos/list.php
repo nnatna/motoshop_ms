@@ -4,8 +4,7 @@
         <p class="text-muted">List all motorcycle transactions in the shop</p>
     </div>
     <div>
-        <a href="motos\add.php" class="btn btn-success rounded-pill fw-bold"><i class="bi-plus-circle"></i> Brand</a>
-    <a href="motos\add.php" class="btn btn-success rounded-pill fw-bold"><i class="bi-plus-circle"></i> Motorcycle</a>
+        <a href="motos\add.php" class="btn btn-success rounded-pill fw-bold"><i class="bi-plus-circle"></i> Motorcycle</a>
     </div>
 </div>
 
@@ -23,7 +22,7 @@ $act = $field == 6 ? "Selected" : "";
     <form method="post" class="d-flex justify-content-between mb-3">
         <div class="text-start row g-3 align-items-center">
             <div class="col-auto">
-                <select name="txtfield" class="form-select rounded-pill">
+                <select name="txtfield" class="form-select shadow-none border-dark-subtle rounded-pill">
                     <option class="text-secondary">Choose field</option>
                     <option value="1" <?php echo ($code_model) ?>>Code</option>
                     <option value="2" <?php echo ($braname) ?>>Brand</option>
@@ -34,15 +33,16 @@ $act = $field == 6 ? "Selected" : "";
                 </select>
             </div>
 
-            <div class="col-auto d-flex justify-content-between align-items-center gap-1">
+            <div class="col-auto d-flex justify-content-between align-items-center">
                 <input type="text" name="txtsearch"
                     value="<?php echo ($search) ?>"
-                    class="form-control rounded-pill" placeholder="Search...">
+                    class="form-control shadow-none border-dark-subtle rounded-start-pill border-end-0" placeholder="Search...">
 
-                <button type="submit" name="btnsearch" class="btn btn-outline-secondary rounded-circle">
+                <button type="submit" name="btnsearch" class="btn text-secondary shadow-none border-dark-subtle rounded-end-pill border-start-0">
                     <i class="bi-search"></i>
                 </button>
-
+            </div>
+            <div class="col-auto">
                 <button type="submit" name="btnreset" class="btn btn-danger rounded-circle">
                     <i class="bi-arrow-counterclockwise"></i>
                 </button>
@@ -175,11 +175,11 @@ $act = $field == 6 ? "Selected" : "";
             echo "<td>" . $row["modname"] . "</td>";
             echo "<td>" . $row["color"] . "</td>";
             echo "<td>" . $row["year"] . "</td>";
-            echo "<td>$" . number_format($row["price"], 2) . "</td>";
+            echo "<td class='text-success'>$" . number_format($row["price"], 2) . "</td>";
             echo "<td>" . $row["act"] . "</td>";
             echo "<td>" . $row["stock"] . "</td>";
             echo "<td class='text-center'>
-            <a href='./motos/edit.php?code_model=" . $row["code_model"] . "' class='bi bi-pencil-square btn btn-outline-primary rounded-circle'></a>
+            <a href='./motos/edit.php?code_model=" . $row["code_model"] . "' class='bi bi-pencil-square btn btn-outline-success rounded-circle'></a>
             <a href='./motos/delete.php?code_model=" . $row["code_model"] . "' class='bi bi-trash btn btn-outline-danger rounded-circle' onclick='return confirm(\"Are you sure?\");'></a>
           </td>";
             echo "</tr>";

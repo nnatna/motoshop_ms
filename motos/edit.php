@@ -1,3 +1,9 @@
+<?php
+session_start();
+if (isset($_SESSION['full_name'])) {;
+} else {
+    header("Location:../login.php");
+} ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,117 +18,119 @@
 </head>
 
 <body>
-    <div class="container bg-light p-0 rounded mt-5 shadow w-25">
-        <div class="bg-dark p-2 text-center m-0 rounded-top">
-            <h3 class="text-center text-light fw-bold">Edit Motorcycle</h3>
-        </div>
-        <?php
-        if (!isset($_POST["submit"])) {
-            require("../db.php");
-            $code_model = $_GET["code_model"];
-            $sql = "SELECT * FROM tblModel WHERE code_model=?;";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("i", $code_model);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            if ($row = $result->fetch_assoc()) {
-                $b = $row["braid"];
-                $m = $row["modname"];
-                $c = $row["color"];
-                $y = $row["year"];
-                $p = $row["price"];
-                $a = $row["act"];
-                $s = $row["stock"];
-        ?>
-                <form method="post" class="p-4">
-                    <div class="mb-3">
-                        <label for="braid" class="form-label fw-bold">Brand</label>
-                        <select class="form-select" id="braid" name="braid" required>
-                            <option value="">--Choose Brand--</option>
-                            <?php
-                            require("../db.php");
-                            $sql = "SELECT * FROM tblBrand";
-                            $stmt = $conn->prepare($sql);
-                            $stmt->execute();
-                            $result = $stmt->get_result();
-                            while ($row = $result->fetch_assoc()) {
-                                if ($row["braid"] == $b) {
-                                    echo ("<option value='" . $row["braid"] . "' selected>" . $row["braname"] . "</option>");
-                                } else {
-                                    echo ("<option value='" . $row["braid"] . "'>" . $row["braname"] . "</option>");
-                                }
-                            }
-                            ?>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="modname" class="form-label fw-bold">Model</label>
-                        <input type="text" class="form-control" id="modname" name="modname" value="<?php echo ($m); ?>" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="color" class="form-label fw-bold">Color</label>
-                        <input type="text" class="form-control" id="color" name="color" value="<?php echo ($c); ?>" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="year" class="form-label fw-bold">Year</label>
-                        <input type="text" class="form-control" id="year" name="year" value="<?php echo ($y); ?>" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="price" class="form-label fw-bold">Price</label>
-                        <input type="text" class="form-control" id="price" name="price" value="<?php echo ($p); ?>" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="Act" class="form-label fw-bold">Action</label>
-                        <select name="act" id="act" class="form-select" required>
-                            <option value="">--Choose Action--</option>
-                            <?php
-                            if ($a == "New") {
-                                echo ("<option value='" . $a . "' selected>" . $a . "</option>");
-                                echo ("<option value='Used'>Used</option>");
-                            } else {
-                                echo ("<option value='" . $a . "' selected>" . $a . "</option>");
-                                echo ("<option value='New'>New</option>");
-                            }
-                            ?>
-
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="stock" class="form-label fw-bold">Stock</label>
-                        <input type="nember" class="form-control" id="stock" name="stock" value="<?php echo ($s); ?>" required>
-                    </div>
-
-                    <div class="d-flex gap-2 justify-content-start mt-3">
-                        <input type="submit" value="Save Changes" name="submit" class="btn btn-primary">
-                        <a href="../motos.php" class="btn btn-secondary">Cancel</a>
-                    </div>
-                </form>
-    </div>
-<?php
-            }
-        }
-?>
-<?php
-            if (isset($_POST["submit"])) {
+    <div class="container bg-light p-0 rounded-4 mt-5 shadow w-25">
+        <div class="card">
+            <div class="bg-dark p-2 text-center m-0 rounded-top-4">
+                <h3 class="text-center p-2 text-light fw-bold">Edit Motorcycle</h3>
+            </div>
+            <?php
+            if (!isset($_POST["submit"])) {
                 require("../db.php");
                 $code_model = $_GET["code_model"];
-                $braid = $_POST["braid"];
-                $modname = $_POST["modname"];
-                $color = $_POST["color"];
-                $year = $_POST["year"];
-                $price = $_POST["price"];
-                $act = $_POST["act"];
-                $stock = $_POST["stock"];
-                $sql = "UPDATE tblModel SET braid=?, modname=?, color=?, year=?, price=?, act=?, stock=? WHERE code_model=?";
+                $sql = "SELECT * FROM tblModel WHERE code_model=?;";
                 $stmt = $conn->prepare($sql);
-                $stmt->bind_param("isssdsii", $braid, $modname, $color, $year, $price, $act, $stock, $code_model);
-                if ($stmt->execute() == true) {
-                    header("Location: ../motos.php");
-                } else {
-                    echo "Error: " . $sql . "<br>" . $conn->error;
+                $stmt->bind_param("i", $code_model);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                if ($row = $result->fetch_assoc()) {
+                    $b = $row["braid"];
+                    $m = $row["modname"];
+                    $c = $row["color"];
+                    $y = $row["year"];
+                    $p = $row["price"];
+                    $a = $row["act"];
+                    $s = $row["stock"];
+            ?>
+                    <form method="post" class="p-4">
+                        <div class="mb-3">
+                            <label for="braid" class="form-label text-muted fw-bold">Brand</label>
+                            <select class="form-select" id="braid" name="braid" required>
+                                <option value="">--Choose Brand--</option>
+                                <?php
+                                require("../db.php");
+                                $sql = "SELECT * FROM tblBrand";
+                                $stmt = $conn->prepare($sql);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
+                                while ($row = $result->fetch_assoc()) {
+                                    if ($row["braid"] == $b) {
+                                        echo ("<option value='" . $row["braid"] . "' selected>" . $row["braname"] . "</option>");
+                                    } else {
+                                        echo ("<option value='" . $row["braid"] . "'>" . $row["braname"] . "</option>");
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="modname" class="form-label text-muted fw-bold">Model</label>
+                            <input type="text" class="form-control" id="modname" name="modname" value="<?php echo ($m); ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="color" class="form-label text-muted fw-bold">Color</label>
+                            <input type="text" class="form-control" id="color" name="color" value="<?php echo ($c); ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="year" class="form-label text-muted fw-bold">Year</label>
+                            <input type="text" class="form-control" id="year" name="year" value="<?php echo ($y); ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="price" class="form-label text-muted fw-bold">Price($)</label>
+                            <input type="text" class="form-control" id="price" name="price" value="<?php echo ($p); ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Act" class="form-label text-muted fw-bold">Action</label>
+                            <select name="act" id="act" class="form-select" required>
+                                <option value="">--Choose Action--</option>
+                                <?php
+                                if ($a == "New") {
+                                    echo ("<option value='" . $a . "' selected>" . $a . "</option>");
+                                    echo ("<option value='Used'>Used</option>");
+                                } else {
+                                    echo ("<option value='" . $a . "' selected>" . $a . "</option>");
+                                    echo ("<option value='New'>New</option>");
+                                }
+                                ?>
+
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="stock" class="form-label text-muted fw-bold">Stock</label>
+                            <input type="nember" class="form-control" id="stock" name="stock" value="<?php echo ($s); ?>" required>
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-around mt-3">
+                            <input type="submit" value="Save Changes" name="submit" class="btn btn-success w-100 rounded-pill">
+                            <a href="../motos.php" class="btn btn-secondary w-100 rounded-pill">Cancel</a>
+                        </div>
+                    </form>
+        </div>
+<?php
                 }
             }
-        ?>
+?>
+    </div>
+    <?php
+    if (isset($_POST["submit"])) {
+        require("../db.php");
+        $code_model = $_GET["code_model"];
+        $braid = $_POST["braid"];
+        $modname = $_POST["modname"];
+        $color = $_POST["color"];
+        $year = $_POST["year"];
+        $price = $_POST["price"];
+        $act = $_POST["act"];
+        $stock = $_POST["stock"];
+        $sql = "UPDATE tblModel SET braid=?, modname=?, color=?, year=?, price=?, act=?, stock=? WHERE code_model=?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("isssdsii", $braid, $modname, $color, $year, $price, $act, $stock, $code_model);
+        if ($stmt->execute() == true) {
+            header("Location: ../motos.php");
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
+    }
+    ?>
     </div>
 </body>
 
