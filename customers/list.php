@@ -13,18 +13,16 @@
 <?php
 
 
-// ចាប់យកតម្លៃសម្រាប់ Search និង Sort
+
 $field = isset($_POST["txtfield"]) ? $_POST["txtfield"] : "";
 $search = isset($_POST["txtsearch"]) ? $_POST["txtsearch"] : "";
 
-// កំណត់ចំណងជើងជម្រើស Select
 $sel_id      = ($field == "1") ? "selected" : "";
 $sel_name    = ($field == "2") ? "selected" : "";
 $sel_gender  = ($field == "3") ? "selected" : "";
 $sel_phone   = ($field == "4") ? "selected" : "";
 $sel_address = ($field == "5") ? "selected" : "";
 ?>
-
 <fieldset>
     <form method="post" class="d-flex justify-content-between mb-3">
         <div class="text-start row g-3 align-items-center">
@@ -79,12 +77,11 @@ $sel_address = ($field == "5") ? "selected" : "";
     <?php
     require("db.php");
 
-    // ១. កំណត់តម្លៃ Pagination (ទំព័រ)
     $limit = 10;
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     $start = ($page - 1) * $limit;
 
-    // ២. មុខងារ Search (ទាញយកពី POST)
+    
     $where = "";
     if (isset($_POST['btnsearch']) && !empty($_POST['txtfield']) && !empty($_POST['txtsearch'])) {
         $field = $_POST['txtfield'];
@@ -97,8 +94,8 @@ $sel_address = ($field == "5") ? "selected" : "";
         }
     }
 
-    // ៣. មុខងារ Sort (លំដាប់លំដោយ)
-    $order = " ORDER BY cusid DESC"; // តម្លៃដើម (Default)
+  
+    $order = " ORDER BY cusid DESC"; 
     if ((isset($_POST['btnasc']) || isset($_POST['btndesc'])) && !empty($_POST['txtfield'])) {
         $field = $_POST['txtfield'];
         $cols = ["1"=>"cusid", "2"=>"cusname", "3"=>"gender", "4"=>"phone", "5"=>"address"];
@@ -109,16 +106,15 @@ $sel_address = ($field == "5") ? "selected" : "";
         }
     }
 
-    // ៤. រាប់ចំនួនសរុបសម្រាប់ Pagination (ប្រើក្នុង Pagination.php)
+    
     $total_query = $conn->query("SELECT COUNT(*) as total FROM tblCustomers $where");
     $total_res = ($total_query) ? $total_query->fetch_assoc()['total'] : 0;
     $pages = ceil($total_res / $limit);
 
-    // ៥. ទាញទិន្នន័យពិតប្រាកដ
+
     $final_sql = "SELECT * FROM tblCustomers $where $order LIMIT $start, $limit";
     $result = $conn->query($final_sql);
 
-    // ៦. បង្ហាញទិន្នន័យក្នុង Table
     if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             ?>

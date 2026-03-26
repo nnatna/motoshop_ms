@@ -91,7 +91,7 @@ SELECT
     b.braname,
     m.code_model,
     m.color,
-    m.yearmade,
+    m.year,
     s.quantity,
     s.amount,
     s.saledate
