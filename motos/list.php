@@ -185,9 +185,17 @@ $act = $field == 6 ? "Selected" : "";
             echo "</tr>";
         }
         ?>
+        
     </tbody>
 </table>
-<?php include 'layout/Pagination.php'; ?>
+<div class="text-center mt-3">
+    <?php if ($total_results > 0): ?>
+        <p class="text-muted small">Showing <strong><?php echo $total_results; ?></strong> result(s)</p>
+    <?php endif; ?>
+    
+    <div class="d-flex justify-content-center">
+        <?php include 'layout/Pagination.php'; ?>
+    </div>
 
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>

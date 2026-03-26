@@ -1,98 +1,140 @@
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h3><i class="bi bi-receipt-cutoff text-success"></i>Lists Motos</h3>
-    <a href="motos\add.php" class="btn btn-success rounded-pill"><i class="bi-plus-circle"></i> Add New Moto</a>
+
+
+<div class="d-flex justify-content-between align-items-center mb-1">
+    <div>
+        <h3 class="btn btn-success rounded-pill fw-bold"><i class="bi bi-cart-check"></i> Sales List</h3>
+        <p class="text-muted">List all motorcycle sales transactions</p>
+    </div>
+    <div>
+        <a href="sales/add.php" class="btn btn-success rounded-pill fw-bold"><i class="bi-plus-circle"></i> New Sale</a>
+    </div>
 </div>
+
 <?php
-$field = isset($_POST["txtfield"]) ? $_POST["txtfield"] : "";
+require("db.php");
+// ទាញយកតម្លៃពី Form (Search & Sort)
+$field  = isset($_POST["txtfield"]) ? $_POST["txtfield"] : "";
 $search = isset($_POST["txtsearch"]) ? $_POST["txtsearch"] : "";
-$code_model = $field == 1 ? "Selected" : "";
-$braname = $field == 2 ? "Selected" : "";
-$modname = $field == 3 ? "Selected" : "";
-$yearmade = $field == 4 ? "Selected" : "";
-$price = $field == 5 ? "Selected" : "";
-$Act = $field == 6 ? "Selected" : "";
+
+$saleid_sel  = $field == 1 ? "selected" : "";
+$cusname_sel = $field == 2 ? "selected" : "";
+$modname_sel = $field == 3 ? "selected" : "";
+$date_sel    = $field == 4 ? "selected" : "";
+
+// កំណត់ Column សម្រាប់តម្រៀប (Sort)
+$sort_column = "s.saleid"; 
+if ($field == "2") $sort_column = "c.cusname";
+if ($field == "3") $sort_column = "m.modname";
+if ($field == "4") $sort_column = "s.saledate";
+
+// កំណត់ការតម្រៀបឡើង ឬ ចុះ (រក្សាតម្លៃទោះជាចុចប៊ូតុងណាក៏ដោយ)
+$sort_order = "DESC"; 
+if (isset($_POST['btnasc'])) $sort_order = "ASC";
+if (isset($_POST['btndesc'])) $sort_order = "DESC";
 ?>
+
 <fieldset>
-    <legend class="text-start fw-bold text-dark mt-2">Lookup</legend>
     <form method="post" class="d-flex justify-content-between mb-3">
         <div class="text-start row g-3 align-items-center">
             <div class="col-auto">
-                <select name="txtfield" class="form-select rounded-pill">
-                    <option class="text-secondary">Choose field</option>
-                    <option value="1" <?php echo ($code_model) ?>>Code</option>
-                    <option value="2" <?php echo ($braname) ?>>Brand</option>
-                    <option value="3" <?php echo ($modname) ?>>Model</option>
-                    <option value="4" <?php echo ($yearmade) ?>>Year</option>
-                    <option value="5" <?php echo ($price) ?>>Price</option>
-                    <option value="6" <?php echo ($Act) ?>>Action</option>
+                <select name="txtfield" class="form-select rounded-pill" required>
+                    <option value="">Choose field</option>
+                    <option value="1" <?php echo $saleid_sel ?>>Sale ID</option>
+                    <option value="2" <?php echo $cusname_sel ?>>Customer Name</option>
+                    <option value="3" <?php echo $modname_sel ?>>Motorcycle Model</option>
+                    <option value="4" <?php echo $date_sel ?>>Sale Date</option>
                 </select>
             </div>
-            <div class="col-auto d-flex justify-content-between align-items-center gap-1 ">
-                <input type="text" name="txtsearch" value="<?php echo ($search) ?>" class="form-control rounded-pill" placeholder="Search...">
-                <a type="submit" name="btnsearch" value="Search" class='bi-search btn btn-outline-secondary rounded-circle'></a>
-                <a type="submit" name="btnreset" value="Reset" class='bi-arrow-counterclockwise btn btn-danger rounded-circle'></a>
+
+            <div class="col-auto d-flex gap-1">
+                <input type="text" name="txtsearch" value="<?php echo $search ?>" class="form-control rounded-pill" placeholder="Type keywords here...">
+                <button type="submit" name="btnsearch" class="btn btn-outline-secondary rounded-circle" title="Search"><i class="bi-search"></i></button>
+                <button type="submit" name="btnreset" class="btn btn-danger rounded-circle" title="Reset"><i class="bi-arrow-counterclockwise"></i></button>
             </div>
         </div>
+
         <div class="text-end">
-            <a type="submit" name="btnasc" value="A-Z" class='bi-sort-alpha-down btn btn-outline-success rounded-circle'></a>
-            <a type="submit" name="btndesc" value="Z-A" class='bi-sort-alpha-up-alt btn btn-outline-danger rounded-circle'></a>
+            <button type="submit" name="btnasc" class="btn btn-outline-success rounded-circle" title="Sort Ascending"><i class="bi-sort-alpha-down"></i></button>
+            <button type="submit" name="btndesc" class="btn btn-outline-danger rounded-circle" title="Sort Descending"><i class="bi-sort-alpha-up"></i></button>
         </div>
     </form>
 </fieldset>
-<div>
 
-</div>
-<table id="Table" class="table table-hover text-center align-middle mb-0">
+<table class="table table-hover text-center align-middle mb-0">
     <thead>
-        <tr class="table-secondary fs-5">
-            <th>Code</th>
-            <th>Brand</th>
-            <th>Model</th>
-            <th>Color</th>
-            <th>Year</th>
-            <th>Price</th>
-            <th>Action</th>
-            <th>Stock</th>
+        <tr class="table-primary fs-6">
+            <th class="text-center">Sale ID</th>
+            <th class="text-center">Customer</th>
+            <th class="text-center">Model</th>
+            <th class="text-center">Qty</th>
+            <th class="text-center">Amount</th>
+            <th class="text-center">Sale Date</th>
             <th class="text-center">Options</th>
         </tr>
     </thead>
     <tbody>
         <?php
-        require("db.php");
-        $sql = "SELECT m.code_model, b.braname, m.modname, m.color, m.yearmade, m.price, m.Act, m.stock 
-                            FROM tblModel m 
-                            JOIN tblBrand b ON m.braid = b.braid";
-        $result = $conn->query($sql);
-        while ($row = $result->fetch_assoc()) {
-            echo "<tr class='aling-middle'>";
-            echo "<td>" . $row["code_model"] . "</td>";
-            echo "<td>" . $row["braname"] . "</td>";
-            echo "<td>" . $row["modname"] . "</td>";
-            echo "<td>" . $row["color"] . "</td>";
-            echo "<td>" . $row["yearmade"] . "</td>";
-            echo "<td>$" . number_format($row["price"], 2) . "</td>";
-            echo "<td class='text-center'>" . $row["Act"] . "</td>";
-            echo "<td>" . $row["stock"] . "</td>";
-            echo "<td class='text-center'>
-        <a href='EditModel.php?code_model=" . $row["code_model"] . "' class='bi bi-pencil-square btn btn-outline-primary rounded-circle'></a>
-        <a href='DeleteModel.php?code_model=" . $row["code_model"] . "' class='bi bi-trash btn btn-outline-danger rounded-circle' onclick='return confirm(\"Are you sure you want to delete this model?\");'></a>
-                        </td>";
-            echo "</tr>";
+        $limit = 10;
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $start = ($page - 1) * $limit;
+
+        $sql_base = "FROM tblSales s 
+                     JOIN tblCustomers c ON s.cusid = c.cusid 
+                     JOIN tblModel m ON s.code_model = m.code_model";
+
+        $where = "";
+        // លក្ខខណ្ឌស្វែងរក៖ ប្រើ LIKE '%$search%' ដើម្បីរកពាក្យកាត់
+        if (!empty($search) && !empty($field)) {
+            switch ($field) {
+                case '1': $where = " WHERE s.saleid LIKE '%$search%'"; break;
+                case '2': $where = " WHERE c.cusname LIKE '%$search%'"; break;
+                case '3': $where = " WHERE m.modname LIKE '%$search%'"; break;
+                case '4': $where = " WHERE s.saledate LIKE '%$search%'"; break;
+            }
+        }
+
+        // រៀបលំដាប់
+        $order_by = " ORDER BY $sort_column $sort_order";
+
+        // រាប់ចំនួនសរុបតាមការ Search
+        $sql_total = "SELECT COUNT(*) as total " . $sql_base . $where;
+        $total_results = $conn->query($sql_total)->fetch_assoc()['total'];
+        $pages = ceil($total_results / $limit); 
+
+        // ទាញទិន្នន័យចុងក្រោយ
+        $sql_final = "SELECT s.saleid, c.cusname, m.modname, s.quantity, s.amount, s.saledate " . 
+                     $sql_base . $where . $order_by . " LIMIT $start, $limit";
+        
+        $result = $conn->query($sql_final);
+
+        if ($result && $result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td># " . $row["saleid"] . "</td>";
+                echo "<td>" . $row["cusname"] . "</td>"; 
+                echo "<td>" . $row["modname"] . "</td>";
+                echo "<td>" . $row["quantity"] . "</td>";
+                echo "<td class='fw-bold text-success'>$" . number_format($row["amount"], 2) . "</td>";
+                echo "<td>" . date('d-M-Y H:i', strtotime($row["saledate"])) . "</td>";
+                echo "<td>
+                        <a href='sales/edit.php?saleid=" . $row["saleid"] . "' class='bi bi-pencil btn btn-sm btn-outline-primary rounded-circle'></a>
+                        <a href='sales/delete.php?id=" . $row["saleid"] . "' class='bi bi-trash btn btn-sm btn-outline-danger rounded-circle' onclick='return confirm(\"Delete this record?\");'></a>
+                    </td>";
+                echo "</tr>";
+            }
+        } else {
+            echo "<tr><td colspan='7' class='text-center py-4 text-muted'>No results found for \"<strong>$search</strong>\"</td></tr>";
         }
         ?>
     </tbody>
 </table>
 
-
-<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $('#salesTable').DataTable({
-            "order": [
-                [0, "desc"]
-            ]
-        });
-    });
-</script>
+<div class="text-center mt-3">
+    <?php if ($total_results > 0): ?>
+        <p class="text-muted small">Showing <strong><?php echo $total_results; ?></strong> result(s)</p>
+    <?php endif; ?>
+    
+    <div class="d-flex justify-content-center">
+        <?php if(file_exists('layout/Pagination.php')) include 'layout/Pagination.php'; ?>
+    </div>
+</div>
