@@ -1,160 +1,167 @@
-    <?php 
-    require("../db.php"); 
-    if (isset($_POST["btn_save_all"])) {
-        // ១. ចាប់យកទិន្នន័យអតិថិជន
-        $cname = trim($_POST["new_cusname"]);
-        $cgen  = $_POST["new_gender"];
-        $cph   = trim($_POST["new_phone"]);
-        $caddr = trim($_POST["new_address"]);
+<?php
+session_start();
+if (!isset($_SESSION['full_name'])) {
+    header("Location:../login.php");
+    exit();
+}
 
-        // ២. ចាប់យកទិន្នន័យការលក់
-        $mid = $_POST["code_model"];
-        $qty = $_POST["quantity"];
-        $amt = $_POST["final_amount"];
+if (isset($_POST["submit"])) {
+    require("../db.php");
 
-        if (empty($cph) || empty($mid)) {
-            echo "<script>alert('សូមបំពេញព័ត៌មានឱ្យបានគ្រប់គ្រាន់!'); window.history.back();</script>";
-            exit();
-        }
+    $cusid = isset($_POST["cusid"]) ? $_POST["cusid"] : null;
+    $cusname = isset($_POST["cusname"]) ? $_POST["cusname"] : null;
+    $gender = isset($_POST["gender"]) ? $_POST["gender"] : null;
+    $phone = isset($_POST["phone"]) ? $_POST["phone"] : null;
+    $address = isset($_POST["address"]) ? $_POST["address"] : null;
 
-        $conn->begin_transaction();
+    if (empty($cusid) && !empty($cusname)) {
+        $sql_check = "SELECT cusid FROM tblcustomers WHERE cusname = ?";
+        $stmt_check = $conn->prepare($sql_check);
+        $stmt_check->bind_param("s", $cusname);
+        $stmt_check->execute();
+        $result_check = $stmt_check->get_result();
 
-        try {
-            $checkCus = $conn->prepare("SELECT cusid FROM tblCustomers WHERE phone = ?");
-            $checkCus->bind_param("s", $cph);
-            $checkCus->execute();
-            $resCheck = $checkCus->get_result();
-
-            if ($resCheck->num_rows > 0) {
-                $rowCus = $resCheck->fetch_assoc();
-                $target_cusid = $rowCus['cusid'];
-            } else {
-                $sqlCus = "INSERT INTO tblCustomers (cusname, gender, phone, address) VALUES (?, ?, ?, ?)";
-                $stCus = $conn->prepare($sqlCus);
-                $stCus->bind_param("ssss", $cname, $cgen, $cph, $caddr);
-                $stCus->execute();
-                $target_cusid = $conn->insert_id;
-            }
-
-            $sqlSale = "INSERT INTO tblSales (cusid, code_model, quantity, amount) VALUES (?, ?, ?, ?)";
-            $stSale = $conn->prepare($sqlSale);
-            $stSale->bind_param("iiid", $target_cusid, $mid, $qty, $amt);
-            $stSale->execute();
-
-            $conn->commit();
-            echo "<script>alert('រក្សាទុកជោគជ័យ!'); window.location='../sales.php';</script>";
-
-        } catch (Exception $e) {
-            $conn->rollback();
-            echo "<script>alert('មានបញ្ហា: " . $e->getMessage() . "');</script>";
+        if ($row = $result_check->fetch_assoc()) {
+            $cusid = $row["cusid"]; 
+        } else {
+            $sql_ins_brand = "INSERT INTO tblcustomers (cusname, gender, phone, address) VALUES (?, ?, ?, ?)";
+            $stmt_ins = $conn->prepare($sql_ins_brand);
+            $stmt_ins->bind_param("ssss", $cusname, $gender, $phone, $address);
+            $stmt_ins->execute();
+            $cusid = $conn->insert_id;
         }
     }
-    ?>
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Sale Management System</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-        <style>
-            body { background-color: #f4f7f6; font-family: 'Segoe UI', sans-serif; }
-            .main-card { border: none; border-radius: 12px; overflow: hidden; max-width: 950px; margin: 40px auto; }
-            .card-header { background-color: #343a40; color: white; text-align: center; padding: 15px; }
-            .section-title { font-size: 1rem; font-weight: 700; color: #0d6efd; border-bottom: 2px solid #e9ecef; padding-bottom: 10px; margin-bottom: 20px; }
-            .divider-right { border-left: 1px solid #dee2e6; padding-left: 30px; }
-            .total-amount { color: #28a745; font-size: 2.8rem; font-weight: bold; }
-            @media (max-width: 768px) { .divider-right { border-left: none; border-top: 1px solid #dee2e6; padding-top: 20px; } }
-        </style>
-    </head>
-    <body>
-    <div class="container">
-        <form method="post" action="">
-            <div class="card main-card shadow-lg">
-                <div class="card-header">
-                    <h4>CUSTOMER & SALE REGISTRATION</h4>
-                </div>
-                <div class="card-body p-4">
-                    <div class="row g-4">
-                        <div class="col-md-6">
-                            <h6 class="section-title"><i class="bi bi-person-plus-fill"></i> Step 1: Customer Info</h6>
-                            <div class="mb-3">
-                                <label class="form-label">Customer Name</label>
-                                <input type="text" class="form-control" name="new_cusname" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Gender</label>
-                                <select class="form-select" name="new_gender">
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Phone Number</label>
-                                <input type="text" class="form-control" name="new_phone" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Address</label>
-                                <textarea class="form-control" name="new_address" rows="2"></textarea>
-                            </div>
-                        </div>
 
-                        <div class="col-md-6 divider-right">
-                            <h6 class="section-title text-success"><i class="bi bi-cart-check"></i> Step 2: Sale Details</h6>
-                            <div class="mb-3">
-                                <label class="form-label">Motorcycle Model</label>
-                                <select class="form-select" name="code_model" id="moto_model" required>
-                                    <option value="">-- Select Model --</option>
-                                    <?php
-                                    $resMod = $conn->query("SELECT code_model, modname, price FROM tblModel");
-                                    while ($row = $resMod->fetch_assoc()) {
-                                        echo "<option value='".$row['code_model']."' data-price='".$row['price']."'>".$row['modname']." ($".$row['price'].")</option>";
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Quantity</label>
-                                <input type="number" class="form-control" name="quantity" id="quantity" value="1" min="1" required>
-                            </div>
+    $quantity = (int)$_POST["quantity"];
+    $model_code = $_POST["model_code"];
 
-                            <div class="text-center p-3 bg-light rounded border my-3">
-                                <div class="small fw-bold text-muted">TOTAL PAYABLE</div>
-                                <div class="total-amount" id="total_text">$0.00</div>
-                                <input type="hidden" name="final_amount" id="final_amount" value="0">
-                            </div>
+    $sql_price = "SELECT price FROM tblModel WHERE code_model = ?";
+    $stmt_price = $conn->prepare($sql_price);
+    $stmt_price->bind_param("i", $model_code);
+    $stmt_price->execute();
+    $res_price = $stmt_price->get_result();
+    $row_price = $res_price->fetch_assoc();
+    $price = $row_price ? $row_price['price'] : 0;
 
-                            <div class="d-flex gap-2">
-                                <a href="../sales.php" class="btn btn-outline-secondary w-50 py-3 fw-bold">
-                                    <i class="bi bi-x-circle"></i> CANCEL
-                                </a>
-                                <button type="submit" name="btn_save_all"  class="btn btn-success w-50 py-3 fw-bold">
-                                    <i class="bi bi-save"></i> SAVE DATA
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <script>
-        const modelSelect = document.getElementById('moto_model');
-        const qtyInput = document.getElementById('quantity');
-        const txtDisplay = document.getElementById('total_text');
-        const valInput = document.getElementById('final_amount');
+    $amount = $quantity * $price;
+    $saledate = date("Y-m-d H:i:s");
 
-        function calculate() {
-            const selectedOption = modelSelect.options[modelSelect.selectedIndex];
-            const price = selectedOption ? selectedOption.getAttribute('data-price') : 0;
-            const total = (price || 0) * qtyInput.value;
-            txtDisplay.innerText = '$' + total.toLocaleString('en-US', {minimumFractionDigits: 2});
-            valInput.value = total;
+    $sql = "INSERT INTO tblSales (cusid, code_model, quantity, amount, saledate) 
+    VALUES (?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("iiids", $cusid, $model_code, $quantity, $amount, $saledate);
+    if ($stmt->execute()) {
+        header("Location:../sales.php");
+        exit();
+    } else {
+        $error_db = "Error: Sale not saved. " . $conn->error;
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Motorcycle</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f6f9;
         }
-        modelSelect.addEventListener('change', calculate);
-        qtyInput.addEventListener('input', calculate);
-    </script>
 
-    </body>
-    </html>
+        .card {
+            min-width: 400px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <div class="card rounded-4 shadow">
+            <div class="bg-dark p-2 text-center m-0 rounded-top-4">
+                <h3 class="text-center text-light fw-bold p-2">Add New Sale</h3>
+            </div>
+            <form method="post" class="p-4">
+                <div class="mb-3">
+                    <label for="brandInput" class="form-label text-muted fw-bold">Customer</label>
+                    <input class="form-control shadow-none border-dark-subtle rounded-pill" list="brandList" id="brandInput" name="cusname" placeholder="Select or type a customer..." required>
+
+                    <datalist id="brandList">
+                        <?php
+                        require("../db.php");
+                        $sql = "SELECT * FROM tblcustomers";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<option value='" . $row['cusname'] . "' data-id='" . $row['cusid'] . "'>";
+                        }
+
+                        ?>
+                    </datalist>
+                </div>
+                    <a class="btn border-dark-subtle w-100 rounded-pill text-muted" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        <i class="bi bi-person-plus-fill me-1"></i>New Customer
+                    </a>
+                <div class="collapse" id="collapseExample">
+                    <div class="mb-3">
+                        <label for="gender" class="form-label text-muted fw-bold">Gender</label>
+                        <select name="gender" id="gender" class="form-select shadow-none border-dark-subtle rounded-pill">
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="phone" class="form-label text-muted fw-bold">Phone Number</label>
+                        <input type="text" class="form-control shadow-none border-dark-subtle rounded-pill" id="phone" name="phone" placeholder="Enter phone number">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="address" class="form-label text-muted fw-bold">Address</label>
+                        <textarea class="form-control rounded-3 shadow-none border-dark-subtle" id="address" name="address" rows="2" placeholder="Enter address"></textarea>
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+                    <label for="modname" class="form-label text-muted fw-bold">Model</label>
+                    <select name="model_code" id="model_code" class="form-select shadow-none border-dark-subtle rounded-pill">
+                        <option value="">Select Model</option>
+                        <?php
+                        require("../db.php");
+                        $sql = "SELECT * FROM tblModel";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<option value='" . $row['code_model'] . "'>" . $row['modname'] . " - " . $row['color'] . " - " . $row['year'] . " - ($" . $row['price'] . ")</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="quantity" class="form-label fw-bold">Quantity</label>
+                    <input type="number" class="form-control rounded-pill" id="quantity" name="quantity" min="1">
+                </div>
+
+                <div class="d-flex gap-2 justify-content-around  mt-3">
+                    <input type="submit" value="Save" name="submit" class="btn btn-success w-100 rounded-pill">
+                    <a href="../sales.php" class="btn btn-secondary w-100 rounded-pill">Cancel</a>
+                </div>
+            </form>
+        </div>
+        <?php if (isset($error_db)): ?>
+            <div class="alert alert-danger mt-2"><?php echo $error_db; ?></div>
+        <?php endif; ?>
+    </div>
+
+</body>
+
+</html>

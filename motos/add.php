@@ -3,7 +3,53 @@ session_start();
 if (isset($_SESSION['full_name'])) {;
 } else {
     header("Location:../login.php");
-} ?>
+}
+
+if (isset($_POST["submit"])) {
+    require("../db.php");
+
+    $braid = isset($_POST["braid"]) ? $_POST["braid"] : null;
+    $braname = isset($_POST["braname"]) ? $_POST["braname"] : null;
+
+    if (empty($braid) && !empty($braname)) {
+        $sql_check = "SELECT braid FROM tblBrand WHERE braname = ?";
+        $stmt_check = $conn->prepare($sql_check);
+        $stmt_check->bind_param("s", $braname);
+        $stmt_check->execute();
+        $result_check = $stmt_check->get_result();
+
+        if ($row = $result_check->fetch_assoc()) {
+            $braid = $row["braid"];
+        } else {
+
+            $sql_ins_brand = "INSERT INTO tblBrand (braname) VALUES (?)";
+            $stmt_ins = $conn->prepare($sql_ins_brand);
+            $stmt_ins->bind_param("s", $braname);
+            $stmt_ins->execute();
+            $braid = $conn->insert_id;
+        }
+    }
+    $modname = $_POST["modname"];
+    $color   = $_POST["color"];
+    $year    = $_POST["year"];
+    $price   = $_POST["price"];
+    $act     = $_POST["act"];
+    $stock   = $_POST["stock"];
+
+    $sql = "INSERT INTO tblModel (braid, modname, color, `year`, price, act, stock) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("isssdsi", $braid, $modname, $color, $year, $price, $act, $stock);
+
+    if ($stmt->execute()) {
+        header("Location: ../motos.php");
+        exit();
+    } else {
+        echo "Error: " . $conn->error;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -62,8 +108,11 @@ if (isset($_SESSION['full_name'])) {;
                     <input type="text" class="form-control shadow-none border-dark-subtle rounded-pill" id="year" name="year" placeholder="Enter manufacturing year" required>
                 </div>
                 <div class="mb-3">
-                    <label for="price" class="form-label text-muted fw-bold">Price($)</label>
-                    <input type="text" class="form-control shadow-none border-dark-subtle rounded-pill" id="price" name="price" placeholder="Enter price" required>
+                    <label for="price" class="form-label text-muted fw-bold">Price</label>
+                    <div class="input-group">
+                        <span class="input-group-text rounded-start-pill shadow-none border-dark-subtle border-end-0 fw-bold text-muted">$</span>
+                        <input type="text" class="form-control shadow-none border-dark-subtle border-start-0 rounded-end-pill" id="price" name="price" placeholder="Enter price" required>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="Act" class="form-label text-muted fw-bold">Action</label>
@@ -84,52 +133,7 @@ if (isset($_SESSION['full_name'])) {;
                 </div>
             </form>
         </div>
-        <?php
-        if (isset($_POST["submit"])) {
-            require("../db.php");
 
-            $braid = isset($_POST["braid"]) ? $_POST["braid"] : null;
-            $braname = isset($_POST["braname"]) ? $_POST["braname"] : null;
-
-            if (empty($braid) && !empty($braname)) {
-                $sql_check = "SELECT braid FROM tblBrand WHERE braname = ?";
-                $stmt_check = $conn->prepare($sql_check);
-                $stmt_check->bind_param("s", $braname);
-                $stmt_check->execute();
-                $result_check = $stmt_check->get_result();
-
-                if ($row = $result_check->fetch_assoc()) {
-                    $braid = $row["braid"]; 
-                } else {
-
-                    $sql_ins_brand = "INSERT INTO tblBrand (braname) VALUES (?)";
-                    $stmt_ins = $conn->prepare($sql_ins_brand);
-                    $stmt_ins->bind_param("s", $braname);
-                    $stmt_ins->execute();
-                    $braid = $conn->insert_id;
-                }
-            }
-            $modname = $_POST["modname"];
-            $color   = $_POST["color"];
-            $year    = $_POST["year"];
-            $price   = $_POST["price"];
-            $act     = $_POST["act"];
-            $stock   = $_POST["stock"];
-
-            $sql = "INSERT INTO tblModel (braid, modname, color, `year`, price, act, stock) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("isssdsi", $braid, $modname, $color, $year, $price, $act, $stock);
-
-            if ($stmt->execute()) {
-                header("Location: ../motos.php");
-                exit();
-            } else {
-                echo "Error: " . $conn->error;
-            }
-        }
-        ?>
     </div>
 </body>
 

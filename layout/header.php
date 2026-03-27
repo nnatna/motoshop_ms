@@ -33,7 +33,7 @@ if (!isset($_SESSION['full_name'])) {
                     </li>
                     <li>
                         <a class="dropdown-item text-danger" href="logout.php">
-                            <i class="bi bi-box-arrow-right me-1"></i>Logout</a>
+                            <i class="bi bi-box-arrow-left me-1"></i>Logout</a>
                     </li>
                 </ul>
             </div>

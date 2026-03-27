@@ -26,10 +26,9 @@
             <div class="mb-3">
                 <label for="gender" class="form-label fw-bold">Gender</label>
                 <select name="gender" id="gender" class="form-select" required>
-                    <option value="">--Choose Gender--</option>
+                    <option value="">Select Gender</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
-                    <option value="Other">Other</option>
                 </select>
             </div>
 

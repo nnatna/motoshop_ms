@@ -16,45 +16,46 @@ $linkBaseInactive = 'nav-link text-dark rounded hover-bg-secondary';
     </div>
     <hr>
     <ul class="nav flex-column mb-auto px-2">
-        <li class="nav-item mb-1">
+        <li class="nav-item fw-medium mb-1">
             <a href="index.php" class="<?php echo ($currentPage === 'index.php') ? $linkBaseActive : $linkBaseInactive; ?>">
-                <i class="bi bi-house-door me-1"></i>Dashboard
+                <i class="bi bi-house-fill me-1"></i>Dashboard
             </a>
         </li>
-        <li class="nav-item mb-1">
+        <li class="nav-item fw-medium mb-1">
             <a href="motos.php" class="<?php echo ($currentPage === 'motos.php') ? $linkBaseActive : $linkBaseInactive; ?>">
-                <i class="bi bi-speedometer2 me-1"></i>Motorcycle
+                <i class="bi bi-speedometer me-1"></i>Motorcycle
             </a>
         </li>
-        <li class="nav-item mb-1">
+        <li class="nav-item fw-medium mb-1">
             <a href="customer.php" class="<?php echo ($currentPage === 'customer.php') ? $linkBaseActive : $linkBaseInactive; ?>">
-                <i class="bi bi-people me-1"></i>Customer
+                <i class="bi bi-people-fill me-1"></i>Customer
             </a>
         </li>
-        <li class="nav-item mb-1">
+        <li class="nav-item fw-medium mb-1">
             <a href="sales.php" class="<?php echo ($currentPage === 'sales.php') ? $linkBaseActive : $linkBaseInactive; ?>">
-                <i class="bi bi-cart4 me-1"></i>Sales
+                <i class="bi bi-cart-dash-fill me-1"></i>Sales
             </a>
         </li>
-        <li class="nav-item mb-1">
-            <a href="report.php" class="<?php echo ($currentPage === 'report.php') ? $linkBaseActive : $linkBaseInactive; ?>">
-                <i class="bi bi-bar-chart me-2"></i>Reports
+        <li class="nav-item fw-medium mb-1">
+            <a href="reports.php" class="<?php echo ($currentPage === 'reports.php') ? $linkBaseActive : $linkBaseInactive; ?>">
+                <i class="bi bi-clipboard2-data-fill me-1"></i>Reports
             </a>
         </li>
-        </li>
-        <li class="nav-item mb-1">
-            <a href="user.php" class="<?php echo ($currentPage === 'user.php') ? $linkBaseActive : $linkBaseInactive; ?>">
-                <i class="bi bi-person-gear me-1"></i>User
-            </a>
-        </li>
-        <li class="nav-item mb-1">
+        <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'Admin'): ?>
+            <li class="nav-item fw-medium mb-1">
+                <a href="user.php" class="<?php echo ($currentPage === 'user.php') ? $linkBaseActive : $linkBaseInactive; ?>">
+                    <i class="bi bi-person-fill me-1"></i>User
+                </a>
+            </li>
+        <?php endif; ?>
+        <li class="nav-item fw-medium mb-1">
             <a href="#" class="nav-link text-dark rounded hover-bg-secondary">
-                <i class="bi bi-gear me-2"></i>Settings
+                <i class="bi bi-gear-fill me-2"></i>Settings
             </a>
         </li>
     </ul>
     <hr>
     <div class="p-4 text-center">
-        <a href="logout.php" class="btn btn-danger fw-bold rounded-pill"><i class="bi bi-box-arrow-right me-1"></i>Logout</a>
+        <a href="logout.php" class="btn btn-danger fw-bold rounded-pill"><i class="bi bi-box-arrow-left me-1"></i>Logout</a>
     </div>
 </aside>

@@ -120,23 +120,17 @@ $sel_address = ($field == "5") ? "selected" : "";
 
     if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            ?>
-            <tr>
-                <td><?= $row["cusid"] ?></td>
-                <td class="text-start"><?= htmlspecialchars($row["cusname"]) ?></td>
-                <td><?= $row["gender"] ?></td>
-                <td><?= $row["phone"] ?></td>
-                <td><?= htmlspecialchars($row["address"]) ?></td>
-                <td class="text-center">
-                    <a href="./customers/edit.php?id=<?= $row["cusid"] ?>" 
-                       class="bi bi-pencil-square btn btn-outline-primary rounded-circle"></a>
-                    
-                    <a href="./customers/delete.php?id=<?= $row["cusid"] ?>" 
-                       class="bi bi-trash btn btn-outline-danger rounded-circle" 
-                       onclick="return confirm('Are you sure you want to delete this customer?');"></a>
-                </td>
-            </tr>
-            <?php
+            echo "<tr>";
+            echo "<td>#" . $row["cusid"] . "</td>";
+            echo "<td>" . $row["cusname"] . "</td>";
+            echo "<td>" . $row["gender"] . "</td>";
+            echo "<td>" . $row["phone"] . "</td>";
+            echo "<td>" . $row["address"] . "</td>";
+            echo "<td class='text-center'>
+                <a href='./customers/edit.php?cusid=" . $row["cusid"] . "' class='bi bi-pencil-square btn btn-outline-success rounded-circle'></a>
+                <a href='./customers/delete.php?cusid=" . $row["cusid"] . "' class='bi bi-trash btn btn-outline-danger rounded-circle' onclick='return confirm(\"Are you sure?\");'></a>
+            </td>";
+            echo "</tr>";
         }
     } else {
         echo "<tr><td colspan='6' class='py-4 text-danger'>No records found!</td></tr>";
@@ -146,7 +140,3 @@ $sel_address = ($field == "5") ? "selected" : "";
 </table>
 
 <?php include 'layout/Pagination.php'; ?>
-
-<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>

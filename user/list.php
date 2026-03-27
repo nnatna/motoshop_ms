@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-between align-items-center mb-1">
     <div>
-        <h3 class="fw-bold text-success"><i class="bi bi-receipt-cutoff"></i>Lists User</h3>
+        <h3 class="fw-bold text-success"><i class="bi bi-person-fill me-1"></i>List Of Users</h3>
         <p class="text-muted">List all user transactions in the shop</p>
     </div>
     <div>
@@ -161,7 +161,3 @@ $role = $field == 4 ? "Selected" : "";
     </tbody>
 </table>
 <?php include 'layout/Pagination.php'; ?>
-
-<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>

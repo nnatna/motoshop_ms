@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-between align-items-center mb-1">
     <div>
-        <h3 class="fw-bold text-success"><i class="bi bi-receipt-cutoff"></i>Lists Motorcycle</h3>
+        <h3 class="fw-bold text-success"><i class="bi bi-speedometer me-1"></i>List Of Motorcycles</h3>
         <p class="text-muted">List all motorcycle transactions in the shop</p>
     </div>
     <div>
@@ -60,9 +60,7 @@ $act = $field == 6 ? "Selected" : "";
         </div>
     </form>
 </fieldset>
-<div>
 
-</div>
 <table id="Table" class="table table-hover text-center align-middle mb-0">
     <thead>
         <tr class="table-secondary fs-5">
@@ -170,12 +168,12 @@ $act = $field == 6 ? "Selected" : "";
         $result = $stmt->get_result();
         while ($row = $result->fetch_assoc()) {
             echo "<tr>";
-            echo "<td>" . $row["code_model"] . "</td>";
+            echo "<td>#" . $row["code_model"] . "</td>";
             echo "<td>" . $row["braname"] . "</td>";
             echo "<td>" . $row["modname"] . "</td>";
             echo "<td>" . $row["color"] . "</td>";
             echo "<td>" . $row["year"] . "</td>";
-            echo "<td class='text-success'>$" . number_format($row["price"], 2) . "</td>";
+            echo "<td class='text-success fw-medium'>$" . number_format($row["price"], 2) . "</td>";
             echo "<td>" . $row["act"] . "</td>";
             echo "<td>" . $row["stock"] . "</td>";
             echo "<td class='text-center'>
@@ -188,7 +186,3 @@ $act = $field == 6 ? "Selected" : "";
     </tbody>
 </table>
 <?php include 'layout/Pagination.php'; ?>
-
-<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>

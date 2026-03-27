@@ -1,18 +1,16 @@
 
-
 <div class="d-flex justify-content-between align-items-center mb-1">
     <div>
-        <h3 class="btn btn-success rounded-pill fw-bold"><i class="bi bi-cart-check"></i> Sales List</h3>
-        <p class="text-muted">List all motorcycle sales transactions</p>
+        <h3 class="fw-bold text-success"><i class="bi bi-cart-dash-fill me-1"></i>List Of Sales</h3>
+        <p class="text-muted">List all sales sales transactions</p>
     </div>
     <div>
-        <a href="sales/add.php" class="btn btn-success rounded-pill fw-bold"><i class="bi-plus-circle"></i> New Sale</a>
+        <a href="sales/add.php" class="btn btn-success rounded-pill fw-bold"><i class="bi-plus-circle me-1"></i>Sale</a>
     </div>
 </div>
-
 <?php
 require("db.php");
-// ទាញយកតម្លៃពី Form (Search & Sort)
+//Search & Sort
 $field  = isset($_POST["txtfield"]) ? $_POST["txtfield"] : "";
 $search = isset($_POST["txtsearch"]) ? $_POST["txtsearch"] : "";
 
@@ -21,13 +19,12 @@ $cusname_sel = $field == 2 ? "selected" : "";
 $modname_sel = $field == 3 ? "selected" : "";
 $date_sel    = $field == 4 ? "selected" : "";
 
-// កំណត់ Column សម្រាប់តម្រៀប (Sort)
+//sort
 $sort_column = "s.saleid"; 
 if ($field == "2") $sort_column = "c.cusname";
 if ($field == "3") $sort_column = "m.modname";
 if ($field == "4") $sort_column = "s.saledate";
 
-// កំណត់ការតម្រៀបឡើង ឬ ចុះ (រក្សាតម្លៃទោះជាចុចប៊ូតុងណាក៏ដោយ)
 $sort_order = "DESC"; 
 if (isset($_POST['btnasc'])) $sort_order = "ASC";
 if (isset($_POST['btndesc'])) $sort_order = "DESC";
@@ -62,7 +59,7 @@ if (isset($_POST['btndesc'])) $sort_order = "DESC";
 
 <table class="table table-hover text-center align-middle mb-0">
     <thead>
-        <tr class="table-primary fs-6">
+        <tr class="table-secondary fs-5">
             <th class="text-center">Sale ID</th>
             <th class="text-center">Customer</th>
             <th class="text-center">Model</th>
@@ -83,7 +80,7 @@ if (isset($_POST['btndesc'])) $sort_order = "DESC";
                      JOIN tblModel m ON s.code_model = m.code_model";
 
         $where = "";
-        // លក្ខខណ្ឌស្វែងរក៖ ប្រើ LIKE '%$search%' ដើម្បីរកពាក្យកាត់
+        //search
         if (!empty($search) && !empty($field)) {
             switch ($field) {
                 case '1': $where = " WHERE s.saleid LIKE '%$search%'"; break;
@@ -93,15 +90,12 @@ if (isset($_POST['btndesc'])) $sort_order = "DESC";
             }
         }
 
-        // រៀបលំដាប់
         $order_by = " ORDER BY $sort_column $sort_order";
 
-        // រាប់ចំនួនសរុបតាមការ Search
         $sql_total = "SELECT COUNT(*) as total " . $sql_base . $where;
         $total_results = $conn->query($sql_total)->fetch_assoc()['total'];
         $pages = ceil($total_results / $limit); 
 
-        // ទាញទិន្នន័យចុងក្រោយ
         $sql_final = "SELECT s.saleid, c.cusname, m.modname, s.quantity, s.amount, s.saledate " . 
                      $sql_base . $where . $order_by . " LIMIT $start, $limit";
         
@@ -110,11 +104,11 @@ if (isset($_POST['btndesc'])) $sort_order = "DESC";
         if ($result && $result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
-                echo "<td># " . $row["saleid"] . "</td>";
+                echo "<td>#" . $row["saleid"] . "</td>";
                 echo "<td>" . $row["cusname"] . "</td>"; 
                 echo "<td>" . $row["modname"] . "</td>";
                 echo "<td>" . $row["quantity"] . "</td>";
-                echo "<td class='fw-bold text-success'>$" . number_format($row["amount"], 2) . "</td>";
+                echo "<td class='fw-medium text-success'>$" . number_format($row["amount"], 2) . "</td>";
                 echo "<td>" . date('d-M-Y H:i', strtotime($row["saledate"])) . "</td>";
                 echo "<td>
                         <a href='sales/edit.php?saleid=" . $row["saleid"] . "' class='bi bi-pencil btn btn-sm btn-outline-primary rounded-circle'></a>
@@ -129,12 +123,4 @@ if (isset($_POST['btndesc'])) $sort_order = "DESC";
     </tbody>
 </table>
 
-<div class="text-center mt-3">
-    <?php if ($total_results > 0): ?>
-        <p class="text-muted small">Showing <strong><?php echo $total_results; ?></strong> result(s)</p>
-    <?php endif; ?>
-    
-    <div class="d-flex justify-content-center">
-        <?php if(file_exists('layout/Pagination.php')) include 'layout/Pagination.php'; ?>
-    </div>
-</div>
+<?php include 'layout/Pagination.php'; ?>
