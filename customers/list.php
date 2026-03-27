@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-between align-items-center mb-1">
     <div>
-        <h3 class="fw-bold text-success"><i class="bi bi-people me-1"></i>List Of Customers</h3>
+        <h3 class="fw-bold text-success"><i class="fa-solid fa-user-group me-1"></i>List Of Customers</h3>
         <p class="text-muted">Manage all customer information in the system</p>
     </div>
     <div>
@@ -48,18 +48,18 @@ $sel_address = ($field == "5") ? "selected" : "";
             </div>
             <div class="col-auto">
                 <button type="submit" name="btnreset" class="btn btn-danger rounded-circle">
-                    <i class="bi-arrow-counterclockwise"></i>
+                    <i class="fa-solid fa-rotate"></i>
                 </button>
             </div>
         </div>
 
         <div class="text-end">
             <button type="submit" name="btnasc" class="btn btn-outline-success rounded-circle">
-                <i class="bi-sort-alpha-down"></i>
+                <i class="fa-solid fa-arrow-down-a-z"></i>
             </button>
 
             <button type="submit" name="btndesc" class="btn btn-outline-danger rounded-circle">
-                <i class="bi-sort-alpha-up-alt"></i>
+                <i class="fa-solid fa-arrow-down-z-a"></i>
             </button>
         </div>
     </form>
@@ -127,8 +127,12 @@ $sel_address = ($field == "5") ? "selected" : "";
             echo "<td>" . $row["phone"] . "</td>";
             echo "<td>" . $row["address"] . "</td>";
             echo "<td class='text-center'>
-                <a href='./customers/edit.php?cusid=" . $row["cusid"] . "' class='bi bi-pencil-square btn btn-outline-success rounded-circle'></a>
-                <a href='./customers/delete.php?cusid=" . $row["cusid"] . "' class='bi bi-trash btn btn-outline-danger rounded-circle' onclick='return confirm(\"Are you sure?\");'></a>
+                <a href='./customers/edit.php?cusid=" . $row["cusid"] . "' class='btn btn-outline-success rounded-circle'>
+                <i class='fa-solid fa-pen-to-square'></i>
+                </a>
+                <a href='./customers/delete.php?cusid=" . $row["cusid"] . "' class='btn btn-outline-danger rounded-circle' onclick='return confirm(\"Are you sure?\");'>
+                <i class='fa-solid fa-trash-can'></i>
+                </a>
             </td>";
             echo "</tr>";
         }

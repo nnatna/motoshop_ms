@@ -21,19 +21,20 @@ if (!isset($_SESSION['full_name'])) {
 
             <div class="dropdown">
                 <a href="#" class="text-light fs-4" data-bs-toggle="dropdown">
-                    <i class="bi bi-person-circle"></i>
+                    <i class="fa-solid fa-circle-user"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end shadow">
                     <li>
                         <a class="dropdown-item" href="profile.php?uerid=<?php echo $_SESSION['userid']; ?>">
-                            <i class="bi bi-person me-1"></i>Profile</a>
+                            <i class="fa-solid fa-user me-1"></i>Profile</a>
                     </li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
                     <li>
                         <a class="dropdown-item text-danger" href="logout.php">
-                            <i class="bi bi-box-arrow-left me-1"></i>Logout</a>
+                            <i class="fa-solid fa-right-from-bracket me-1"></i>Logout
+                        </a>
                     </li>
                 </ul>
             </div>

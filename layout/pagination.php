@@ -1,5 +1,5 @@
 <nav aria-label="Page navigation example" class="mt-4 text-center">
-    <ul class="pagination justify-content-center pagination-dark pagination-sm">
+    <ul class="pagination justify-content-center pagination-dark">
         <li class="page-item <?php if($page <= 1){ echo 'disabled'; } ?>">
             <a class="page-link bg-dark text-white border-secondary rounded-start-pill" href="<?php if($page > 1){ echo "?page=".($page - 1); } else { echo "#"; } ?>">Previous</a>
         </li>

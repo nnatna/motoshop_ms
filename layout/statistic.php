@@ -1,42 +1,22 @@
 <?php require_once dirname(__DIR__) . "/db.php"; ?>
 
 <?php
-function countBrand($conn)
-{
-    $sql = "SELECT COUNT(*) AS total FROM tblbrand";
-    $result = $conn->query($sql);
-    if ($result && $row = $result->fetch_assoc()) {
-        return $row['total'];
-    }
-    return 0;
-}
-function countMoto($conn)
-{
-    $sql = "SELECT SUM(stock) AS total FROM tblmodel";
-    $result = $conn->query($sql);
-    if ($result && $row = $result->fetch_assoc()) {
-        return $row['total'];
-    }
-    return 0;
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
 }
 
-function countCustomer($conn)
-{
-    $sql = "SELECT COUNT(*) AS total FROM tblcustomers";
-    $result = $conn->query($sql);
-    if ($result && $row = $result->fetch_assoc()) {
-        return $row['total'];
-    }
-    return 0;
-}
+$res_income = mysqli_query($conn, "SELECT SUM(amount) as total FROM tblsales");
+$total_income = mysqli_fetch_assoc($res_income)['total'] ?? 0;
 
-function countowStock($conn)
-{
-    $sql = "SELECT COUNT(*) AS total FROM tblmodel WHERE stock <= 5";
-    $result = $conn->query($sql);
-    if ($result && $row = $result->fetch_assoc()) {
-        return $row['total'];
-    }
-    return 0;
-}
+$res_brands = mysqli_query($conn, "SELECT COUNT(braid) as total FROM tblbrand");
+$total_brands = mysqli_fetch_assoc($res_brands)['total'] ?? 0;
+
+$res_stock = mysqli_query($conn, "SELECT SUM(stock) as total FROM tblmodel");
+$total_stock = mysqli_fetch_assoc($res_stock)['total'] ?? 0;
+
+$res_customers = mysqli_query($conn, "SELECT COUNT(cusid) as total FROM tblcustomers");
+$total_customers = mysqli_fetch_assoc($res_customers)['total'] ?? 0;
+
+$res_low_stock = mysqli_query($conn, "SELECT COUNT(code_model) as total FROM tblmodel WHERE stock <= 5");
+$low_stock_count = mysqli_fetch_assoc($res_low_stock)['total'] ?? 0;
 ?>

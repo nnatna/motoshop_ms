@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-between align-items-center mb-1">
     <div>
-        <h3 class="fw-bold text-success"><i class="bi bi-person-fill me-1"></i>List Of Users</h3>
+        <h3 class="fw-bold text-success"><i class="fa-solid fa-user me-1"></i>List Of Users</h3>
         <p class="text-muted">List all user transactions in the shop</p>
     </div>
     <div>
@@ -41,7 +41,7 @@ $role = $field == 4 ? "Selected" : "";
                 </div>
                 <div class="col-auto">
                     <button type="submit" name="btnreset" class="btn btn-danger rounded-circle">
-                        <i class="bi-arrow-counterclockwise"></i>
+                        <i class="fa-solid fa-rotate"></i>
                     </button>
                 </div>
             </div>
@@ -49,11 +49,11 @@ $role = $field == 4 ? "Selected" : "";
 
         <div class="text-end">
             <button type="submit" name="btnasc" class="btn btn-outline-success rounded-circle">
-                <i class="bi-sort-alpha-down"></i>
+                <i class="fa-solid fa-arrow-down-a-z"></i>
             </button>
 
             <button type="submit" name="btndesc" class="btn btn-outline-danger rounded-circle">
-                <i class="bi-sort-alpha-up-alt"></i>
+                <i class="fa-solid fa-arrow-down-z-a"></i>
             </button>
         </div>
     </form>
@@ -149,11 +149,15 @@ $role = $field == 4 ? "Selected" : "";
             echo "<td>" . $row["userid"] . "</td>";
             echo "<td>" . $row["full_name"] . "</td>";
             echo "<td>" . $row["username"] . "</td>";
-            echo "<td>" . $row["password"] . "</td>";
-            echo "<td class='text-danger'>" . $row["role"] . "</td>";
+            echo "<td class='text-muted'>" . $row["password"] . "</td>";
+            echo "<td class='text-danger fw-medium'>" . $row["role"] . "</td>";
             echo "<td>
-            <a href='./user/edit.php?userid=" . $row["userid"] . "' class='bi bi-pencil-square btn btn-outline-success rounded-circle'></a>
-            <a href='./user/delete.php?userid=" . $row["userid"] . "' class='bi bi-trash btn btn-outline-danger rounded-circle' onclick='return confirm(\"Are you sure?\");'></a>
+            <a href='./user/edit.php?userid=" . $row["userid"] . "' class='btn btn-outline-success rounded-circle'>
+            <i class='fa-solid fa-pen-to-square'></i>
+            </a>
+            <a href='./user/delete.php?userid=" . $row["userid"] . "' class='btn btn-outline-danger rounded-circle' onclick='return confirm(\"Are you sure?\");'>
+            <i class='fa-solid fa-trash-can'></i>
+            </a>
           </td>";
             echo "</tr>";
         }

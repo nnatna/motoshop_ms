@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-between align-items-center mb-1">
     <div>
-        <h3 class="fw-bold text-success"><i class="bi bi-speedometer me-1"></i>List Of Motorcycles</h3>
+        <h3 class="fw-bold text-success"><i class="fa-solid fa-motorcycle me-1"></i>List Of Motorcycles</h3>
         <p class="text-muted">List all motorcycle transactions in the shop</p>
     </div>
     <div>
@@ -18,6 +18,7 @@ $year = $field == 4 ? "Selected" : "";
 $price = $field == 5 ? "Selected" : "";
 $act = $field == 6 ? "Selected" : "";
 ?>
+
 <fieldset>
     <form method="post" class="d-flex justify-content-between mb-3">
         <div class="text-start row g-3 align-items-center">
@@ -44,18 +45,18 @@ $act = $field == 6 ? "Selected" : "";
             </div>
             <div class="col-auto">
                 <button type="submit" name="btnreset" class="btn btn-danger rounded-circle">
-                    <i class="bi-arrow-counterclockwise"></i>
+                    <i class="fa-solid fa-rotate"></i>
                 </button>
             </div>
         </div>
 
         <div class="text-end">
             <button type="submit" name="btnasc" class="btn btn-outline-success rounded-circle">
-                <i class="bi-sort-alpha-down"></i>
+                <i class="fa-solid fa-arrow-down-a-z"></i>
             </button>
 
             <button type="submit" name="btndesc" class="btn btn-outline-danger rounded-circle">
-                <i class="bi-sort-alpha-up-alt"></i>
+                <i class="fa-solid fa-arrow-down-z-a"></i>
             </button>
         </div>
     </form>
@@ -177,8 +178,12 @@ $act = $field == 6 ? "Selected" : "";
             echo "<td>" . $row["act"] . "</td>";
             echo "<td>" . $row["stock"] . "</td>";
             echo "<td class='text-center'>
-            <a href='./motos/edit.php?code_model=" . $row["code_model"] . "' class='bi bi-pencil-square btn btn-outline-success rounded-circle'></a>
-            <a href='./motos/delete.php?code_model=" . $row["code_model"] . "' class='bi bi-trash btn btn-outline-danger rounded-circle' onclick='return confirm(\"Are you sure?\");'></a>
+            <a href='./motos/edit.php?code_model=" . $row["code_model"] . "' class='btn btn-outline-success rounded-circle'>
+            <i class='fa-solid fa-pen-to-square'></i>
+            </a>
+            <a href='./motos/delete.php?code_model=" . $row["code_model"] . "' class='btn btn-outline-danger rounded-circle' onclick='return confirm(\"Are you sure?\");'>
+            <i class='fa-solid fa-trash-can'></i>
+            </a>
           </td>";
             echo "</tr>";
         }
