@@ -1,10 +1,12 @@
 <div class="d-flex justify-content-between align-items-center mb-1">
     <div>
-        <h3 class="fw-bold text-success"><i class="bi bi-receipt-cutoff"></i>Lists Motorcycle</h3>
+        <h3 class="fw-bold text-success"><i class="bi bi-speedometer me-1"></i>List Of Motorcycle</h3>
         <p class="text-muted">List all motorcycle transactions in the shop</p>
     </div>
     <div>
-        <a href="motos\add.php" class="btn btn-success rounded-pill fw-bold"><i class="bi-plus-circle"></i> Motorcycle</a>
+        <a href="motos\add.php" class="btn btn-success rounded-pill fw-bold">
+            <i class="bi-plus-circle me-1"></i> Motorcycle
+        </a>
     </div>
 </div>
 
@@ -185,9 +187,18 @@ $act = $field == 6 ? "Selected" : "";
             echo "</tr>";
         }
         ?>
+        
     </tbody>
 </table>
-<?php include 'layout/Pagination.php'; ?>
+<div class="text-center mt-3">
+    <?php if ($total_results > 0): ?>
+        <p class="text-muted small">Showing <strong><?php echo $total_results; ?></strong> result(s)</p>
+    <?php endif; ?>
+    
+    <div class="d-flex justify-content-center">
+        <?php include 'layout/Pagination.php'; ?>
+    </div>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
