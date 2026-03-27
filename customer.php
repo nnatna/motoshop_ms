@@ -14,7 +14,7 @@
     <div class="main-wrapper">
         <?php include 'layout/sidebar.php'; ?>
         <main class="content-wrapper">
-            <?php include 'sales/list.php'; ?>
+            <?php include 'customers/list.php'; ?>
         </main>
     </div>
     <?php include 'layout/footer.php';?>
