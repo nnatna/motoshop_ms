@@ -3,52 +3,7 @@ session_start();
 if (isset($_SESSION['full_name'])) {;
 } else {
     header("Location:../login.php");
-} 
-
-if (isset($_POST["submit"])) {
-    require("../db.php");
-
-    $braid = isset($_POST["braid"]) ? $_POST["braid"] : null;
-    $braname = isset($_POST["braname"]) ? $_POST["braname"] : null;
-
-    if (empty($braid) && !empty($braname)) {
-        $sql_check = "SELECT braid FROM tblBrand WHERE braname = ?";
-        $stmt_check = $conn->prepare($sql_check);
-        $stmt_check->bind_param("s", $braname);
-        $stmt_check->execute();
-        $result_check = $stmt_check->get_result();
-
-        if ($row = $result_check->fetch_assoc()) {
-            $braid = $row["braid"]; 
-        } else {
-            $sql_ins_brand = "INSERT INTO tblBrand (braname) VALUES (?)";
-            $stmt_ins = $conn->prepare($sql_ins_brand);
-            $stmt_ins->bind_param("s", $braname);
-            $stmt_ins->execute();
-            $braid = $conn->insert_id;
-        }
-    }
-    $modname = $_POST["modname"];
-    $color   = $_POST["color"];
-    $year    = $_POST["year"];
-    $price   = $_POST["price"];
-    $act     = $_POST["act"];
-    $stock   = $_POST["stock"];
-
-    $sql = "INSERT INTO tblModel (braid, modname, color, `year`, price, act, stock) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("isssdsi", $braid, $modname, $color, $year, $price, $act, $stock);
-
-    if ($stmt->execute()) {
-        header("Location: ../motos.php");
-        exit();
-    } else {
-        echo "Error: Try again!<br>" . $conn->error;
-    }
-}
-?>
+} ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -120,7 +75,7 @@ if (isset($_POST["submit"])) {
                 </div>
                 <div class="mb-3">
                     <label for="stock" class="form-label text-muted fw-bold">Stock</label>
-                    <input type="number" class="form-control shadow-none border-dark-subtle rounded-pill" id="stock" name="stock" placeholder="Enter stock" required>
+                    <input type="nember" class="form-control shadow-none border-dark-subtle rounded-pill" id="stock" name="stock" placeholder="Enter stock" required>
                 </div>
 
                 <div class="d-flex gap-2 justify-content-around  mt-3">
@@ -129,6 +84,52 @@ if (isset($_POST["submit"])) {
                 </div>
             </form>
         </div>
+        <?php
+        if (isset($_POST["submit"])) {
+            require("../db.php");
+
+            $braid = isset($_POST["braid"]) ? $_POST["braid"] : null;
+            $braname = isset($_POST["braname"]) ? $_POST["braname"] : null;
+
+            if (empty($braid) && !empty($braname)) {
+                $sql_check = "SELECT braid FROM tblBrand WHERE braname = ?";
+                $stmt_check = $conn->prepare($sql_check);
+                $stmt_check->bind_param("s", $braname);
+                $stmt_check->execute();
+                $result_check = $stmt_check->get_result();
+
+                if ($row = $result_check->fetch_assoc()) {
+                    $braid = $row["braid"]; 
+                } else {
+
+                    $sql_ins_brand = "INSERT INTO tblBrand (braname) VALUES (?)";
+                    $stmt_ins = $conn->prepare($sql_ins_brand);
+                    $stmt_ins->bind_param("s", $braname);
+                    $stmt_ins->execute();
+                    $braid = $conn->insert_id;
+                }
+            }
+            $modname = $_POST["modname"];
+            $color   = $_POST["color"];
+            $year    = $_POST["year"];
+            $price   = $_POST["price"];
+            $act     = $_POST["act"];
+            $stock   = $_POST["stock"];
+
+            $sql = "INSERT INTO tblModel (braid, modname, color, `year`, price, act, stock) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("isssdsi", $braid, $modname, $color, $year, $price, $act, $stock);
+
+            if ($stmt->execute()) {
+                header("Location: ../motos.php");
+                exit();
+            } else {
+                echo "Error: " . $conn->error;
+            }
+        }
+        ?>
     </div>
 </body>
 
