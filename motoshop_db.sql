@@ -24,7 +24,7 @@ CREATE TABLE tblBrand (
 
 CREATE TABLE tblModel (
     code_model INT PRIMARY KEY AUTO_INCREMENT,
-    braid INT,
+    braid INT NOT NULL,
     modname VARCHAR(100) NOT NULL,
     color VARCHAR(100) NOT NULL,
     `year` YEAR NOT NULL,
@@ -36,8 +36,8 @@ CREATE TABLE tblModel (
 
 CREATE TABLE tblSales (
     saleid INT PRIMARY KEY AUTO_INCREMENT,
-    cusid INT,
-    code_model INT,
+    cusid INT NOT NULL,
+    code_model INT NOT NULL,
     quantity INT NOT NULL,
     amount DECIMAL(10, 2),
     saledate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -91,7 +91,7 @@ SELECT
     b.braname,
     m.code_model,
     m.color,
-    m.yearmade,
+    m.year,
     s.quantity,
     s.amount,
     s.saledate
