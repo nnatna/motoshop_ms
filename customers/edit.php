@@ -21,10 +21,10 @@
 </head>
 
 <body>
-    <div class="container bg-light p-0 rounded mt-5 shadow w-25">
+    <div class="container bg-light p-0 rounded-4 mt-5 shadow w-25">
         <div class="card">
-            <div class="bg-dark p-2 text-center m-0 rounded-top">
-                <h3 class="text-center text-light fw-bold">Edit Customer Information</h3>
+            <div class="bg-dark p-2 text-center m-0 rounded-top-4">
+                <h3 class="text-center text-light -bold">Edit Customer Information</h3>
             </div>
 
             <?php
@@ -46,12 +46,12 @@
 
                 <form method="post" class="p-4">
                     <div class="mb-3">
-                        <label for="cusname" class="form-label fw-bold">Customer Name</label>
+                        <label for="cusname" class="form-label text-muted fw-bold">Customer Name</label>
                         <input type="text" class="form-control" id="cusname" name="cusname" value="<?= htmlspecialchars($n) ?>" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="gender" class="form-label fw-bold">Gender</label>
+                        <label for="gender" class="form-label text-muted fw-bold">Gender</label>
                         <select name="gender" id="gender" class="form-select" required>
                             <option value="Male" <?= ($g == 'Male') ? 'selected' : '' ?>>Male</option>
                             <option value="Female" <?= ($g == 'Female') ? 'selected' : '' ?>>Female</option>
@@ -60,18 +60,18 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="phone" class="form-label fw-bold">Phone Number</label>
+                        <label for="phone" class="form-label text-muted fw-bold">Phone Number</label>
                         <input type="text" class="form-control" id="phone" name="phone" value="<?= htmlspecialchars($p) ?>" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="address" class="form-label fw-bold">Address</label>
+                        <label for="address" class="form-label text-muted fw-bold">Address</label>
                         <textarea class="form-control" id="address" name="address" rows="2" required><?= htmlspecialchars($a) ?></textarea>
                     </div>
 
                     <div class="d-flex gap-2 justify-content-start mt-3">
-                        <button type="submit" name="submit" class="btn btn-primary px-4">Save Changes</button>
-                        <a href="../customer.php" class="btn btn-secondary px-4">Cancel</a>
+                        <button type="submit" name="submit" class="btn btn-success w-100 rounded-pill">Save Changes</button>
+                        <a href="../customer.php" class="btn btn-secondary w-100 rounded-pill">Cancel</a>
                     </div>
                 </form>
         </div>

@@ -21,19 +21,20 @@
 </head>
 
 <body>
-    <div class="container bg-light p-0 rounded mt-5 shadow w-25">
-        <div class="bg-dark p-2 text-center m-0 rounded-top">
-            <h3 class="text-center text-light fw-bold">Add New Customer</h3>
+    <div class="d-flex justify-content-center align-items-center vh-100">
+          <div class="card rounded-4 shadow">
+        <div class="bg-dark p-2 text-center m-0 rounded-top-4">
+            <h3 class="text-center text-light fw-bold p-2">Add New Customer</h3>
         </div>
 
         <form method="post" class="p-4">
             <div class="mb-3">
-                <label for="cusname" class="form-label fw-bold">Customer Name</label>
+                <label for="cusname" class="form-label text-muted fw-bold">Customer Name</label>
                 <input type="text" class="form-control" id="cusname" name="cusname" placeholder="Enter customer name" required>
             </div>
 
             <div class="mb-3">
-                <label for="gender" class="form-label fw-bold">Gender</label>
+                <label for="gender" class="form-label text-muted fw-bold">Gender</label>
                 <select name="gender" id="gender" class="form-select" required>
                     <option value="">Select Gender</option>
                     <option value="Male">Male</option>
@@ -42,20 +43,21 @@
             </div>
 
             <div class="mb-3">
-                <label for="phone" class="form-label fw-bold">Phone Number</label>
-                <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter phone number" required>
+                <label for="phone" class="form-label text-muted fw-bold">Phone Number</label>
+                <input type="text" class="form-control shadow-none border-dark-subtle rounded-pill" id="phone" name="phone" placeholder="Enter phone number" required>
             </div>
 
             <div class="mb-3">
-                <label for="address" class="form-label fw-bold">Address</label>
-                <textarea class="form-control" id="address" name="address" rows="2" placeholder="Enter address" required></textarea>
+                <label for="address" class="form-label text-muted fw-bold">Address</label>
+                <textarea class="form-control shadow-none border-dark-subtle rounded-pill" id="address" name="address" rows="2" placeholder="Enter address" required></textarea>
             </div>
 
-            <div class="d-flex gap-2 justify-content-start mt-3">
-                <button type="submit" name="submit" class="btn btn-primary px-4">Save</button>
-                <a href="../customer.php" class="btn btn-secondary px-4">Cancel</a>
+            <div class="d-flex gap-2 justify-content-around  mt-4">
+                <button type="submit" name="submit" class="btn btn-success w-100 rounded-pill">Save</button>
+                <a href="../customer.php" class="btn btn-secondary w-100 rounded-pill">Cancel</a>
             </div>
         </form>
+        </div>
 
         <?php
         if (isset($_POST["submit"])) {
