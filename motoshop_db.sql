@@ -6,7 +6,8 @@ CREATE TABLE tbluser (
     full_name VARCHAR(100),
     username VARCHAR(50) NOT NULL UNIQUE,
     `password` VARCHAR(255) NOT NULL,
-    role ENUM('Admin', 'User') DEFAULT 'User'
+    role ENUM('Admin', 'User') DEFAULT 'User',
+    profile VARCHAR(50)
 );
 
 CREATE TABLE tblCustomers (
@@ -45,10 +46,10 @@ CREATE TABLE tblSales (
     FOREIGN KEY (code_model) REFERENCES tblModel(code_model)
 ) AUTO_INCREMENT=1001;
 
-INSERT INTO users (username, password_user, full_name, role) VALUES
-('admin', '1234', 'Admin User', 'Admin'),
-('sokvanna', '4321', 'Sok Vanna', 'User');
-SELECT * FROM users;
+INSERT INTO tbluser (full_name, username, `password`, role) VALUES
+('Ngel Ratana', 'ratana', 'caf1a3dfb505ffed0d024130f58c5cfa', 'Admin'),
+('Sourn Sophea', 'sophea', '202cb962ac59075b964b07152d234b70', 'User');
+SELECT * FROM tbluser;
 
 INSERT INTO tblBrand (braname) VALUES
 ('Honda'),

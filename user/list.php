@@ -61,10 +61,11 @@ $role = $field == 4 ? "Selected" : "";
 <div>
 
 </div>
-<table id="Table" class="table table-hover text-center align-middle mb-0">
+<table id="Table" class="table table-hover text-start border align-middle mb-0">
     <thead>
-        <tr class="table-secondary fs-5">
+        <tr class="table-secondary border-1 border-dark-subtle fs-5">
             <th>ID</th>
+            <th>Profile</th>
             <th>Full Name</th>
             <th>Username</th>
             <th>Password</th>
@@ -147,11 +148,12 @@ $role = $field == 4 ? "Selected" : "";
         while ($row = $result->fetch_assoc()) {
             echo "<tr>";
             echo "<td>" . $row["userid"] . "</td>";
+            echo "<td><img src='image/profile/" . ($row["profile_img"] ?? 'default.png') . "' alt='Profile' class='img-fluid rounded-circle' style='width: 50px; height: 50px; object-fit: cover;'></td>";
             echo "<td>" . $row["full_name"] . "</td>";
             echo "<td>" . $row["username"] . "</td>";
             echo "<td class='text-muted'>" . $row["password"] . "</td>";
             echo "<td class='text-danger fw-medium'>" . $row["role"] . "</td>";
-            echo "<td>
+            echo "<td class='text-center'>
             <a href='./user/edit.php?userid=" . $row["userid"] . "' class='btn btn-outline-success rounded-circle'>
             <i class='fa-solid fa-pen-to-square'></i>
             </a>

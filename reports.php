@@ -22,6 +22,7 @@
                     <h3 class="fw-bold text-success"><i class="fa-solid fa-clipboard-list me-1"></i>List Of Reports</h3>
                     <p class="text-muted">List all reports of motorcycle transactions in the shop</p>
                 </div>
+                <?php include 'user/add.php'; ?>
                 <div>
                     <button type="button" class="btn btn-success rounded-pill fw-bold"><i class="bi bi-floppy-fill me-1"></i>DPF</button>
                 </div>
