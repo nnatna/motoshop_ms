@@ -10,15 +10,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body class="bg-secondary-subtle">
-
     <div class="container mt-5 mb-5">
         <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card shadow border-0">
-                    <div class="card-header bg-dark text-white text-center py-3">
+            <div class="col-md-4">
+                <div class="card rounded-top-4 shadow border-0">
+                    <div class="card-header bg-dark text-white text-center m-0 rounded-top-4">
                         <h3 class="mb-0 fw-bold">Edit Sales Record</h3>
                     </div>
-                    <div class="card-body p-4 bg-white">
+                    <div class="card-body card rounded-bottom-1 p- bg-white ">
                         
                         <?php
                         require("../db.php");
@@ -52,41 +51,40 @@
                                     <input type="hidden" id="unit_price" value="<?php echo $unit_price; ?>">
 
                                     <div class="mb-3">
-                                        <label class="form-label fw-bold">Customer ID</label>
-                                        <input type="number" class="form-control form-control-lg" name="cusid" value="<?php echo $cusid; ?>" required>
+                                        <label class="form-label text-muted fw-bold">Customer ID</label>
+                                        <input type="number" class="form-control shadow-none border-dark-subtle rounded-pill " name="cusid" value="<?php echo $cusid; ?>" required>
                                     </div>
 
                                     <div class="mb-3">
-                                        <label class="form-label fw-bold">Motorcycle Model ID</label>
-                                        <input type="number" class="form-control form-control-lg" name="code_model" value="<?php echo $code_model; ?>" required>
+                                        <label class="form-label text-muted fw-bold">Motorcycle Model ID</label>
+                                        <input type="number" class="form-control shadow-none border-dark-subtle rounded-pill " name="code_model" value="<?php echo $code_model; ?>" required>
                                     </div>
 
                                     <div class="mb-3">
-                                        <label class="form-label fw-bold">Sale Date</label>
-                                        <input type="date" class="form-control form-control-lg" name="saledate" value="<?php echo $saledate; ?>" required>
+                                        <label class="form-label text-muted fw-bold">Sale Date</label>
+                                        <input type="date" class="form-control shadow-none border-dark-subtle rounded-pill " name="saledate" value="<?php echo $saledate; ?>" required>
                                     </div>
 
                                     <div class="mb-3">
-                                        <label class="form-label fw-bold">Quantity</label>
-                                        <input type="number" id="qty" class="form-control form-control-lg" name="quantity" value="<?php echo $quantity; ?>" required oninput="calculateTotal()">
+                                        <label class="form-label text-muted fw-bold">Quantity</label>
+                                        <input type="number" id="qty" class="form-control shadow-none border-dark-subtle rounded-pill " name="quantity" value="<?php echo $quantity; ?>" required oninput="calculateTotal()">
                                     </div>
 
                                     <div class="mb-4">
-                                        <label class="form-label fw-bold">Total Amount ($)</label>
+                                        <label class="form-label text-muted fw-bold ">Total Amount ($)</label>
                                         <div class="input-group">
-                                            <span class="input-group-text bg-light">$</span>
-                                            <input type="number" id="total_amount" step="0.01" class="form-control form-control-lg fw-bold text-success bg-light" name="amount" value="<?php echo $amount; ?>" required readonly>
+                                            <span class="input-group-text bg-light ">$</span>
+                                            <input type="number" id="total_amount" step="0.01" class="form-control  fw-bold text-success bg-light  " name="amount" value="<?php echo $amount; ?>" required readonly>
                                         </div>
                                     </div>
-
-                                    <hr>
-
-                                    <div class="d-flex gap-2">
-                                        <button type="submit" name="submit" class="btn btn-success btn-lg flex-grow-1 shadow-sm">
-                                            <i class="bi bi-check-circle-fill"></i> Save Changes
-                                        </button>
-                                        <a href="../sales.php" class="btn btn-outline-secondary btn-lg px-4">Cancel</a>
-                                    </div>
+                    
+                                    <div class="mb-3">
+                            <!-- <label for="stock" class="form-label text-muted fw-bold">Sav Changes</label> -->
+                        </div>
+                        <div class="d-flex gap-2 justify-content-around mt-3">
+                            <input type="submit" value="Save Changes" name="submit" class="btn btn-success w-100 rounded-pill">
+                            <a href="../sales.php" class="btn btn-secondary w-100 rounded-pill">Cancel</a>
+                        </div>
                                 </form>
                         <?php
                             } else {
