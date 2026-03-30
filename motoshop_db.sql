@@ -7,7 +7,7 @@ CREATE TABLE tbluser (
     username VARCHAR(50) NOT NULL UNIQUE,
     `password` VARCHAR(255) NOT NULL,
     role ENUM('Admin', 'User') DEFAULT 'User',
-    profile VARCHAR(50)
+    profile_img VARCHAR(50)
 );
 
 CREATE TABLE tblCustomers (
