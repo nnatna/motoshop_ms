@@ -43,6 +43,14 @@ if (isset($_POST["submit"])) {
     $stmt->bind_param("isssdsi", $braid, $modname, $color, $year, $price, $act, $stock);
 
     if ($stmt->execute()) {
+        $last_id = $conn->insert_id;
+        if (isset($_FILES['image']) && !empty($_FILES['image']['tmp_name'])) {
+            $extension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+            $picture = $last_id . "." . $extension;
+            if (move_uploaded_file($_FILES['image']['tmp_name'], "../image/motorcycles/$picture")) {
+                $conn->query("UPDATE tblModel SET picture='$picture' WHERE code_model=$last_id");
+            }
+        }
         header("Location: ../motos.php");
         exit();
     } else {
@@ -61,15 +69,8 @@ if (isset($_POST["submit"])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        body {
-            background-color: #f4f6f9;
-        }
-
-        .card {
-            min-width: 400px;
-        }
-    </style>
+    <link rel="stylesheet" href="../assets/css/form.css">
+    <script src="../assets/js/form.js"></script>
 </head>
 
 <body>
@@ -78,7 +79,7 @@ if (isset($_POST["submit"])) {
             <div class="bg-dark p-2 text-center m-0 rounded-top-4">
                 <h3 class="text-center text-light fw-bold p-2">Add New Motorcycle</h3>
             </div>
-            <form method="post" class="p-4">
+            <form method="post" class="p-4" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="brandInput" class="form-label text-muted fw-bold">Brand</label>
                     <input class="form-control shadow-none border-dark-subtle rounded-pill" list="brandList" id="brandInput" name="braname" placeholder="Select or type a brand..." required>
@@ -97,12 +98,12 @@ if (isset($_POST["submit"])) {
                     </datalist>
                 </div>
                 <div class="mb-3">
-                    <label for="modname" class="form-label text-muted fw-bold">Model</label>
-                    <input type="text" class="form-control shadow-none border-dark-subtle rounded-pill" id="modname" name="modname" placeholder="Enter model name" required>
+                    <label for="modname" class="form-label text-muted fw-bold">Motorcycle</label>
+                    <input type="text" class="form-control shadow-none border-dark-subtle rounded-pill" id="modname" name="modname" placeholder="Enter motorcycle name" required>
                 </div>
                 <div class="mb-3">
                     <label for="color" class="form-label text-muted fw-bold">Color</label>
-                    <input type="text" class="form-control shadow-none border-dark-subtle rounded-pill" id="color" name="color" placeholder="Enter name color" required>
+                    <input type="text" class="form-control shadow-none border-dark-subtle rounded-pill" id="color" name="color" placeholder="Enter color" required>
                 </div>
                 <div class="mb-3">
                     <label for="year" class="form-label text-muted fw-bold ">Year</label>
@@ -123,11 +124,26 @@ if (isset($_POST["submit"])) {
                         <option value="Used">Used</option>
                     </select>
                 </div>
+
                 <div class="mb-3">
                     <label for="stock" class="form-label text-muted fw-bold">Stock</label>
-                    <input type="nember" class="form-control shadow-none border-dark-subtle rounded-pill" id="stock" name="stock" placeholder="Enter stock" required>
+                    <input type="number" class="form-control shadow-none border-dark-subtle rounded-pill" id="stock" name="stock" placeholder="Enter stock" required>
                 </div>
 
+                <div class="mb-4 text-center border rounded-4 p-2 shadow-sm upload-zone" onclick="document.getElementById('image').click();" style="cursor: pointer;">
+                    <input type="file" class="d-none" id="image" name="image" onchange="showimg()" accept="image/*">
+                    <div class="upload-zone-content">
+                        <div id="uploadPlaceholder" class="p-2">
+                            <i class="fa-solid fa-cloud-arrow-up text-primary mb-2" style="font-size: 3rem;"></i>
+                        </div>
+                        <img src=""
+                            id="previewImage"
+                            class="shadow-sm d-none"
+                            style="width: 80px; height: 80px; object-fit: cover;"
+                            alt="Preview">
+                    </div>
+                    <p class="mb-0 text-muted small">Click to browse motorcycle photo</p>
+                </div>
                 <div class="d-flex gap-2 justify-content-around  mt-3">
                     <input type="submit" value="Save" name="submit" class="btn btn-success w-100 rounded-pill">
                     <a href="../motos.php" class="btn btn-secondary w-100 rounded-pill">Cancel</a>
@@ -136,6 +152,7 @@ if (isset($_POST["submit"])) {
         </div>
 
     </div>
+    <script src="../assets/js/form.js"></script>
 </body>
 
 </html>

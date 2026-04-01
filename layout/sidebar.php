@@ -49,14 +49,14 @@ $linkBaseInactive = 'nav-link text-dark rounded hover-bg-secondary';
             </li>
         <?php endif; ?>
         <li class="nav-item fw-medium mb-1">
-            <a href="#" class="nav-link text-dark rounded hover-bg-secondary">
+            <a href="settings.php" class="nav-link text-dark rounded hover-bg-secondary">
                 <i class="fa-solid fa-gear me-1"></i>Settings
             </a>
         </li>
     </ul>
     <hr>
-    <div class="p-4 text-center">
-        <a href="logout.php" class="btn btn-danger fw-bold rounded-pill">
+    <div class="p-4 text-start">
+        <a href="logout.php" class="fw-bold text-decoration-none text-danger">
             <i class="fa-solid fa-right-from-bracket me-1"></i>Logout
         </a>
     </div>

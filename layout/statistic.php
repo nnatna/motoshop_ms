@@ -21,9 +21,7 @@ $res_recent = mysqli_query($conn, $sql_recent);
 $res_brands = mysqli_query($conn, "SELECT COUNT(braid) as total FROM tblbrand");
 $total_brands = mysqli_fetch_assoc($res_brands)['total'] ?? 0;
 
-$res_stock = mysqli_query($conn, "SELECT SUM(stock) as total FROM tblmodel
-                                  JOIN tblsales ON tblmodel.code_model = tblsales.code_model
-                                  WHERE saledate BETWEEN '$start' AND '$end'");
+$res_stock = mysqli_query($conn, "SELECT SUM(stock) as total FROM tblmodel");
 $total_stock = mysqli_fetch_assoc($res_stock)['total'] ?? 0;
 
 $res_low_stock = mysqli_query($conn, "SELECT COUNT(code_model) as total FROM tblmodel WHERE stock <= 5");

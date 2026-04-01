@@ -7,7 +7,7 @@ CREATE TABLE tbluser (
     username VARCHAR(50) NOT NULL UNIQUE,
     `password` VARCHAR(255) NOT NULL,
     role ENUM('Admin', 'User') DEFAULT 'User',
-    profile VARCHAR(50)
+    profile_img VARCHAR(50)
 );
 
 CREATE TABLE tblCustomers (
@@ -32,6 +32,7 @@ CREATE TABLE tblModel (
     price DECIMAL(10, 2) NOT NULL,
     act VARCHAR(5) NOT NULL,
     stock INT DEFAULT 0,
+    picture VARCHAR(255),
     FOREIGN KEY (braid) REFERENCES tblBrand(braid)
 )AUTO_INCREMENT=8000001;
 
@@ -41,9 +42,11 @@ CREATE TABLE tblSales (
     code_model INT NOT NULL,
     quantity INT NOT NULL,
     amount DECIMAL(10, 2),
-    saledate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    saledate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    userid INT,
     FOREIGN KEY (cusid) REFERENCES tblCustomers(cusid),
-    FOREIGN KEY (code_model) REFERENCES tblModel(code_model)
+    FOREIGN KEY (code_model) REFERENCES tblModel(code_model),
+    FOREIGN KEY (userid) REFERENCES tbluser(userid)
 ) AUTO_INCREMENT=1001;
 
 INSERT INTO tbluser (full_name, username, `password`, role) VALUES
@@ -77,11 +80,11 @@ VALUES
 ('Heng Makara','Male',   '015667788', 'Battambang');
 SELECT * FROM tblCustomers;
 
-INSERT INTO tblSales (cusid, code_model, quantity, amount) VALUES
-(1, 8000001, 1, 1350.00),
-(2, 8000004, 1, 2200.00),
-(3, 8000002, 1, 1800.00),
-(4, 8000006, 1, 2100.00);
+INSERT INTO tblSales (cusid, code_model, quantity, amount, saledate, userid) VALUES
+(1, 8000001, 1, 1350.00, '2026-03-01', 1),
+(2, 8000004, 1, 2200.00, '2026-03-11', 2),
+(3, 8000002, 1, 1800.00, '2026-03-23',1),
+(4, 8000006, 1, 2100.00, '2026-03-25',2);
 SELECT * FROM tblSales;
 
 CREATE OR REPLACE VIEW vsales AS
@@ -90,7 +93,7 @@ SELECT
     c.cusname,
     c.phone,
     b.braname,
-    m.code_model,
+    m.modname,
     m.color,
     m.year,
     s.quantity,
@@ -102,3 +105,22 @@ JOIN tblModel     m ON s.code_model  = m.code_model
 JOIN tblBrand     b ON m.braid  = b.braid;       
 
 SELECT * FROM vsales;
+
+CREATE OR REPLACE VIEW vsales_report AS
+SELECT 
+    s.saledate,
+    c.cusname,
+    b.braname,
+    m.modname,
+    s.quantity,
+    s.amount,
+    u.full_name
+FROM tblSales s                          
+JOIN tbluser u ON s.userid = u.userid       
+JOIN tblCustomers c ON s.cusid  = c.cusid        
+JOIN tblModel     m ON s.code_model  = m.code_model        
+JOIN tblBrand     b ON m.braid  = b.braid;       
+
+SELECT * FROM vsales_report;
+
+

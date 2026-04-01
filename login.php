@@ -2,7 +2,7 @@
 if (isset($_POST['submit'])) {
     $u = $_POST["username"];
     $p = md5($_POST["password"]);
-    $sql = "SELECT userid, full_name, role FROM tbluser WHERE username=? AND password=?;";
+    $sql = "SELECT userid, full_name, username, role, profile_img FROM tbluser WHERE username=? AND password=?;";
     require("db.php");
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ss", $u, $p);
@@ -14,6 +14,7 @@ if (isset($_POST['submit'])) {
         $_SESSION['full_name'] = $row['full_name'];
         $_SESSION['username'] = $row['username'];
         $_SESSION['role'] = $row['role'];
+        $_SESSION['profile_img'] = $row['profile_img'];
         header("Location: ./index.php");
     } else {
        $error = "Invalid username or password!!";

@@ -1,3 +1,42 @@
+<?php
+session_start();
+if (isset($_SESSION['full_name'])) {;
+} else {
+    header("Location:../login.php");
+}
+
+if (isset($_POST["submit"])) {
+    require("../db.php");
+    $cusid = $_GET["id"];
+    $cusname = $_POST["cusname"];
+    $gender  = $_POST["gender"];
+    $phone   = $_POST["phone"];
+
+    $sql_check = "SELECT phone FROM tblCustomers WHERE phone = ? AND cusid != ?";
+    $stmt_check = $conn->prepare($sql_check);
+    $stmt_check->bind_param("ss", $phone, $cusid);
+    $stmt_check->execute();
+    $result_check = $stmt_check->get_result();
+
+    if ($row = $result_check->fetch_assoc()) {
+        $error_msg = "Phone number already exists. Please choose another";
+    }
+
+    $address = $_POST["address"];
+
+    $sql = "UPDATE tblCustomers SET cusname=?, gender=?, phone=?, address=? WHERE cusid=?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssssi", $cusname, $gender, $phone, $address, $cusid);
+
+    if ($stmt->execute()) {
+        header("Location: ../customer.php");
+        exit();
+    } else {
+        $error_msg = "Error updating record: " . $conn->error;
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,26 +48,18 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        body {
-            background-color: #f4f6f9;
-        }
-
-        .card {
-            min-width: 400px;
-        }
-    </style>
+    <link rel="stylesheet" href="../assets/css/form.css">
+    <script src="../assets/js/form.js"></script>
 </head>
 
 <body>
-    <div class="container bg-light p-0 rounded-4 mt-5 shadow w-25">
-        <div class="card">
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <div class="card shadow rounded-4">
             <div class="bg-dark p-2 text-center m-0 rounded-top-4">
-                <h3 class="text-center text-light -bold">Edit Customer Information</h3>
+                <h3 class="text-center text-light -bold">Edit Customer</h3>
             </div>
 
             <?php
-            // ២. ទាញទិន្នន័យចាស់មកបង្ហាញក្នុង Form
             require("../db.php");
             $cusid = $_GET["cusid"];
             $sql = "SELECT * FROM tblCustomers WHERE cusid=?";
@@ -45,28 +76,34 @@
             ?>
 
                 <form method="post" class="p-4">
+                    <div>
+                        <?php
+                        if (isset($error_msg)) {
+                            echo "<div class='alert alert-danger p-1 text-center'>$error_msg</div>";
+                        }
+                        ?>
+                    </div>
                     <div class="mb-3">
                         <label for="cusname" class="form-label text-muted fw-bold">Customer Name</label>
-                        <input type="text" class="form-control" id="cusname" name="cusname" value="<?= htmlspecialchars($n) ?>" required>
+                        <input type="text" class="form-control shadow-none border-dark-subtle rounded-pill" id="cusname" name="cusname" value="<?= htmlspecialchars($n) ?>" required>
                     </div>
 
                     <div class="mb-3">
                         <label for="gender" class="form-label text-muted fw-bold">Gender</label>
-                        <select name="gender" id="gender" class="form-select" required>
+                        <select name="gender" id="gender" class="form-select shadow-none border-dark-subtle rounded-pill" required>
                             <option value="Male" <?= ($g == 'Male') ? 'selected' : '' ?>>Male</option>
                             <option value="Female" <?= ($g == 'Female') ? 'selected' : '' ?>>Female</option>
-                            <option value="Other" <?= ($g == 'Other') ? 'selected' : '' ?>>Other</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
                         <label for="phone" class="form-label text-muted fw-bold">Phone Number</label>
-                        <input type="text" class="form-control" id="phone" name="phone" value="<?= htmlspecialchars($p) ?>" required>
+                        <input type="text" class="form-control shadow-none border-dark-subtle rounded-pill" id="phone" name="phone" value="<?= htmlspecialchars($p) ?>" required>
                     </div>
 
                     <div class="mb-3">
                         <label for="address" class="form-label text-muted fw-bold">Address</label>
-                        <textarea class="form-control" id="address" name="address" rows="2" required><?= htmlspecialchars($a) ?></textarea>
+                        <textarea class="form-control shadow-none border-dark-subtle rounded-3" id="address" name="address" rows="2" required><?= htmlspecialchars($a) ?></textarea>
                     </div>
 
                     <div class="d-flex gap-2 justify-content-start mt-3">
@@ -75,36 +112,9 @@
                     </div>
                 </form>
         </div>
-        <?php
-
-                // ១. ត្រួតពិនិត្យការ Save (Update) នៅខាងលើគេបង្អស់ ដើម្បីចៀសវាង Error Header
-                if (isset($_POST["submit"])) {
-                    require("../db.php");
-                    $cusid = $_GET["id"]; // ប្រើ id ដែលបញ្ជូនតាម URL
-                    $cusname = $_POST["cusname"];
-                    $gender  = $_POST["gender"];
-                    $phone   = $_POST["phone"];
-                    $address = $_POST["address"];
-
-                    $sql = "UPDATE tblCustomers SET cusname=?, gender=?, phone=?, address=? WHERE cusid=?";
-                    $stmt = $conn->prepare($sql);
-                    $stmt->bind_param("ssssi", $cusname, $gender, $phone, $address, $cusid);
-
-                    if ($stmt->execute()) {
-                        header("Location: ../customer.php");
-                        exit();
-                    } else {
-                        $error_msg = "Error updating record: " . $conn->error;
-                    }
-                }
-        ?>
-
     <?php
-            } else {
-                echo "<div class='p-4 text-center text-danger'>Customer not found!</div>";
             }
     ?>
-    </div>
 </body>
 
 </html>

@@ -58,102 +58,102 @@ $role = $field == 4 ? "Selected" : "";
         </div>
     </form>
 </fieldset>
-<div>
+<div class="table-responsive bg-white rounded-4 shadow-sm p-3">
+    <table id="Table" class="table table-hover align-middle">
+        <thead>
+            <tr class="table-secondary">
+                <th>ID</th>
+                <th>Profile</th>
+                <th>Full Name</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Role</th>
+                <th class="text-center">Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            require("db.php");
 
-</div>
-<table id="Table" class="table table-hover text-start border align-middle mb-0">
-    <thead>
-        <tr class="table-secondary border-1 border-dark-subtle fs-5">
-            <th>ID</th>
-            <th>Profile</th>
-            <th>Full Name</th>
-            <th>Username</th>
-            <th>Password</th>
-            <th>Role</th>
-            <th class="text-center">Options</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-        require("db.php");
-
-        $limit = 10;
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $start = ($page - 1) * $limit;
-        $total_results = $conn->query("SELECT COUNT(*) as id FROM tbluser")->fetch_assoc()['id'];
-        $pages = ceil($total_results / $limit);
-        $sql = "SELECT * FROM tbluser";
-        //search
-        if (isset($_POST['btnsearch'])) {
-            $field = $_POST['txtfield'];
-            $text = $_POST['txtsearch'];
-            switch ($field) {
-                case '1':
-                    $sql .= " WHERE userid LIKE '%$text%'";
-                    break;
-                case '2':
-                    $sql .= " WHERE full_name LIKE '%$text%'";
-                    break;
-                case '3':
-                    $sql .= " WHERE username LIKE '%$text%'";
-                    break;
-                case '4':
-                    $sql .= " WHERE role LIKE '%$text%'";
-                    break;
+            $limit = 10;
+            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            $start = ($page - 1) * $limit;
+            $total_results = $conn->query("SELECT COUNT(*) as id FROM tbluser")->fetch_assoc()['id'];
+            $pages = ceil($total_results / $limit);
+            $sql = "SELECT * FROM tbluser";
+            //search
+            if (isset($_POST['btnsearch'])) {
+                $field = $_POST['txtfield'];
+                $text = $_POST['txtsearch'];
+                switch ($field) {
+                    case '1':
+                        $sql .= " WHERE userid LIKE '%$text%'";
+                        break;
+                    case '2':
+                        $sql .= " WHERE full_name LIKE '%$text%'";
+                        break;
+                    case '3':
+                        $sql .= " WHERE username LIKE '%$text%'";
+                        break;
+                    case '4':
+                        $sql .= " WHERE role LIKE '%$text%'";
+                        break;
+                }
             }
-        }
-        //sort asc
-        if (isset($_POST['btnasc'])) {
-            $field = $_POST['txtfield'];
-            switch ($field) {
-                case '1':
-                    $sql .= " ORDER BY userid ASC";
-                    break;
-                case '2':
-                    $sql .= " ORDER BY full_name ASC";
-                    break;
-                case '3':
-                    $sql .= " ORDER BY username ASC";
-                    break;
-                case '4':
-                    $sql .= " ORDER BY role ASC";
-                    break;
+            //sort asc
+            if (isset($_POST['btnasc'])) {
+                $field = $_POST['txtfield'];
+                switch ($field) {
+                    case '1':
+                        $sql .= " ORDER BY userid ASC";
+                        break;
+                    case '2':
+                        $sql .= " ORDER BY full_name ASC";
+                        break;
+                    case '3':
+                        $sql .= " ORDER BY username ASC";
+                        break;
+                    case '4':
+                        $sql .= " ORDER BY role ASC";
+                        break;
+                }
             }
-        }
-        //sort desc
-        if (isset($_POST['btndesc'])) {
-            $field = $_POST['txtfield'];
-            switch ($field) {
-                case '1':
-                    $sql .= " ORDER BY userid DESC";
-                    break;
-                case '2':
-                    $sql .= " ORDER BY full_name DESC";
-                    break;
-                case '3':
-                    $sql .= " ORDER BY username DESC";
-                    break;
-                case '4':
-                    $sql .= " ORDER BY role DESC";
-                    break;
-                case '5':
+            //sort desc
+            if (isset($_POST['btndesc'])) {
+                $field = $_POST['txtfield'];
+                switch ($field) {
+                    case '1':
+                        $sql .= " ORDER BY userid DESC";
+                        break;
+                    case '2':
+                        $sql .= " ORDER BY full_name DESC";
+                        break;
+                    case '3':
+                        $sql .= " ORDER BY username DESC";
+                        break;
+                    case '4':
+                        $sql .= " ORDER BY role DESC";
+                        break;
+                    case '5':
+                }
             }
-        }
 
-        $sql .= " LIMIT $start, $limit";
+            $sql .= " LIMIT $start, $limit";
 
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        while ($row = $result->fetch_assoc()) {
-            echo "<tr>";
-            echo "<td>" . $row["userid"] . "</td>";
-            echo "<td><img src='image/profile/" . ($row["profile_img"] ?? 'default.png') . "' alt='Profile' class='img-fluid rounded-circle' style='width: 50px; height: 50px; object-fit: cover;'></td>";
-            echo "<td>" . $row["full_name"] . "</td>";
-            echo "<td>" . $row["username"] . "</td>";
-            echo "<td class='text-muted'>" . $row["password"] . "</td>";
-            echo "<td class='text-danger fw-medium'>" . $row["role"] . "</td>";
-            echo "<td class='text-center'>
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td>#" . $row["userid"] . "</td>";
+                $profile_pic = !empty($row["profile_img"]) ? $row["profile_img"] : "default.jpg";
+                echo "<td><img src='image/profile/" . $profile_pic . "' alt='" . $row["full_name"] . "' 
+            class='img-fluid rounded-circle border border-dark-subtle' style='width: 50px; height: 50px; object-fit: cover;'></td>";
+                echo "<td class='fw-medium'>" . $row["full_name"] . "</td>";
+                echo "<td>" . $row["username"] . "</td>";
+                echo "<td class='text-muted'>" . $row["password"] . "</td>";
+                echo "<td class='text-danger fw-medium'>" . $row["role"] . "</td>";
+                echo "<td class='text-center'>
             <a href='./user/edit.php?userid=" . $row["userid"] . "' class='btn btn-outline-success rounded-circle'>
             <i class='fa-solid fa-pen-to-square'></i>
             </a>
@@ -161,9 +161,10 @@ $role = $field == 4 ? "Selected" : "";
             <i class='fa-solid fa-trash-can'></i>
             </a>
           </td>";
-            echo "</tr>";
-        }
-        ?>
-    </tbody>
-</table>
+                echo "</tr>";
+            }
+            ?>
+        </tbody>
+    </table>
+</div>
 <?php include 'layout/Pagination.php'; ?>

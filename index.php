@@ -29,7 +29,7 @@
                     </button>
                 </div>
             </div>
-            <div class="table-container mb-4">
+            <div class="bg-white p-3 rounded-4 shadow-sm mb-4">
                 <form method="post" class="row g-3 align-items-end">
                     <div class="col-md-auto">
                         <label class="form-label small fw-bold">Start Date</label>
@@ -48,6 +48,7 @@
                     </div>
                 </form>
             </div>
+
 
             <div class="row g-3 mb-4">
                 <div class="col-12 col-sm-6 col-xl-3">

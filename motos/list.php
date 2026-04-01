@@ -27,7 +27,7 @@ $act = $field == 6 ? "Selected" : "";
                     <option class="text-secondary">Choose field</option>
                     <option value="1" <?php echo ($code_model) ?>>Code</option>
                     <option value="2" <?php echo ($braname) ?>>Brand</option>
-                    <option value="3" <?php echo ($modname) ?>>Model</option>
+                    <option value="3" <?php echo ($modname) ?>>Motorcycle</option>
                     <option value="4" <?php echo ($year) ?>>Year</option>
                     <option value="5" <?php echo ($price) ?>>Price</option>
                     <option value="6" <?php echo ($act) ?>>Action</option>
@@ -62,122 +62,131 @@ $act = $field == 6 ? "Selected" : "";
     </form>
 </fieldset>
 
-<table id="Table" class="table table-hover text-center align-middle mb-0">
-    <thead>
-        <tr class="table-secondary fs-5">
-            <th>Code</th>
-            <th>Brand</th>
-            <th>Model</th>
-            <th>Color</th>
-            <th>Year</th>
-            <th>Price</th>
-            <th>Action</th>
-            <th>Stock</th>
-            <th class="text-center">Options</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-        require("db.php");
+<div class="table-responsive bg-white rounded-4 shadow-sm p-3">
+    <table id="Table" class="table table-hover align-middle">
+        <thead>
+            <tr class="table-secondary">
+                <th>Picture</th>
+                <th>Code</th>
+                <th>Motorcycle</th>
+                <th>Color</th>
+                <th>Year</th>
+                <th>Price</th>
+                <th>Action</th>
+                <th>Stock</th>
+                <th class="text-center">Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            require("db.php");
 
-        $limit = 10;
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $start = ($page - 1) * $limit;
-        $total_results = $conn->query("SELECT COUNT(*) as id FROM tblModel")->fetch_assoc()['id'];
-        $pages = ceil($total_results / $limit);
-        $sql = "SELECT m.code_model, b.braname, m.modname, m.color, m.year, m.price, m.act, m.stock 
-        FROM tblModel m 
-        JOIN tblBrand b ON m.braid = b.braid";
-        //search
-        if (isset($_POST['btnsearch'])) {
-            $field = $_POST['txtfield'];
-            $text = $_POST['txtsearch'];
-            switch ($field) {
-                case '1':
-                    $sql .= " WHERE m.code_model LIKE '%$text%'";
-                    break;
-                case '2':
-                    $sql .= " WHERE b.braname LIKE '%$text%'";
-                    break;
-                case '3':
-                    $sql .= " WHERE m.modname LIKE '%$text%'";
-                    break;
-                case '4':
-                    $sql .= " WHERE m.year LIKE '%$text%'";
-                    break;
-                case '5':
-                    $sql .= " WHERE m.price LIKE '%$text%'";
-                    break;
-                case '6':
-                    $sql .= " WHERE m.act LIKE '%$text%'";
-                    break;
-            }
-        }
-        //sort asc
-        if (isset($_POST['btnasc'])) {
-            $field = $_POST['txtfield'];
-            switch ($field) {
-                case '1':
-                    $sql .= " ORDER BY m.code_model ASC";
-                    break;
-                case '2':
-                    $sql .= " ORDER BY b.braname ASC";
-                    break;
-                case '3':
-                    $sql .= " ORDER BY m.modname ASC";
-                    break;
-                case '4':
-                    $sql .= " ORDER BY m.year ASC";
-                    break;
-                case '5':
-                    $sql .= " ORDER BY m.price ASC";
-                    break;
-                case '6':
-                    $sql .= " ORDER BY m.act ASC";
-                    break;
-            }
-        }
-        //sort desc
-        if (isset($_POST['btndesc'])) {
-            $field = $_POST['txtfield'];
-            switch ($field) {
-                case '1':
-                    $sql .= " ORDER BY m.code_model DESC";
-                    break;
-                case '2':
-                    $sql .= " ORDER BY b.braname DESC";
-                    break;
-                case '3':
-                    $sql .= " ORDER BY m.modname DESC";
-                    break;
-                case '4':
-                    $sql .= " ORDER BY m.year DESC";
-                    break;
-                case '5':
-                    $sql .= " ORDER BY m.price DESC";
-                    break;
-                case '6':
-                    $sql .= " ORDER BY m.act DESC";
-                    break;
-            }
-        }
+            $limit = 10;
+            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            $start = ($page - 1) * $limit;
 
-        $sql .= " LIMIT $start, $limit";
+            $sql_base = " FROM tblModel m JOIN tblBrand b ON m.braid = b.braid";
+            $where = "";
 
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        while ($row = $result->fetch_assoc()) {
-            echo "<tr>";
-            echo "<td>#" . $row["code_model"] . "</td>";
-            echo "<td>" . $row["braname"] . "</td>";
-            echo "<td>" . $row["modname"] . "</td>";
-            echo "<td>" . $row["color"] . "</td>";
-            echo "<td>" . $row["year"] . "</td>";
-            echo "<td class='text-success fw-medium'>$" . number_format($row["price"], 2) . "</td>";
-            echo "<td>" . $row["act"] . "</td>";
-            echo "<td>" . $row["stock"] . "</td>";
-            echo "<td class='text-center'>
+            //search
+            if (isset($_POST['btnsearch']) && !empty($_POST['txtfield']) && !empty($_POST['txtsearch'])) {
+                $field = $_POST['txtfield'];
+                $text = $conn->real_escape_string($_POST['txtsearch']);
+                switch ($field) {
+                    case '1':
+                        $where = " WHERE m.code_model LIKE '%$text%'";
+                        break;
+                    case '2':
+                        $where = " WHERE b.braname LIKE '%$text%'";
+                        break;
+                    case '3':
+                        $where = " WHERE m.modname LIKE '%$text%'";
+                        break;
+                    case '4':
+                        $where = " WHERE m.year LIKE '%$text%'";
+                        break;
+                    case '5':
+                        $where = " WHERE m.price LIKE '%$text%'";
+                        break;
+                    case '6':
+                        $where = " WHERE m.act LIKE '%$text%'";
+                        break;
+                }
+            }
+
+            $total_results = $conn->query("SELECT COUNT(*) as total " . $sql_base . $where)->fetch_assoc()['total'];
+            $pages = ceil($total_results / $limit);
+
+            $sql = "SELECT m.code_model, b.braname, m.modname, m.color, m.year, m.price, m.act, m.stock, m.picture " . $sql_base . $where;
+
+            //sort asc
+            if (isset($_POST['btnasc'])) {
+                $field = $_POST['txtfield'];
+                switch ($field) {
+                    case '1':
+                        $sql .= " ORDER BY m.code_model ASC";
+                        break;
+                    case '2':
+                        $sql .= " ORDER BY b.braname ASC";
+                        break;
+                    case '3':
+                        $sql .= " ORDER BY m.modname ASC";
+                        break;
+                    case '4':
+                        $sql .= " ORDER BY m.year ASC";
+                        break;
+                    case '5':
+                        $sql .= " ORDER BY m.price ASC";
+                        break;
+                    case '6':
+                        $sql .= " ORDER BY m.act ASC";
+                        break;
+                }
+            }
+            //sort desc
+            if (isset($_POST['btndesc'])) {
+                $field = $_POST['txtfield'];
+                switch ($field) {
+                    case '1':
+                        $sql .= " ORDER BY m.code_model DESC";
+                        break;
+                    case '2':
+                        $sql .= " ORDER BY b.braname DESC";
+                        break;
+                    case '3':
+                        $sql .= " ORDER BY m.modname DESC";
+                        break;
+                    case '4':
+                        $sql .= " ORDER BY m.year DESC";
+                        break;
+                    case '5':
+                        $sql .= " ORDER BY m.price DESC";
+                        break;
+                    case '6':
+                        $sql .= " ORDER BY m.act DESC";
+                        break;
+                }
+            }
+
+            $sql .= " LIMIT $start, $limit";
+
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($row = $result->fetch_assoc()) {
+                $picture = !empty($row["picture"]) ? $row["picture"] : "default.png";
+                echo "<tr>";
+                echo "<td><img src='image/motorcycles/" . $picture . "' alt='" . $row["modname"] . "' 
+            class='img-thumbnail' style='width: 50px; height: 50px; object-fit: cover;'>
+            </td>";
+                echo "<td>" . $row["code_model"] . "</td>";
+                echo "<td class='fw-medium'>" . $row["braname"] . " " . $row["modname"] . "</td>";
+                echo "<td>" . $row["color"] . "</td>";
+                echo "<td>" . $row["year"] . "</td>";
+                echo "<td class='text-success fw-medium'>$" . number_format($row["price"], 2) . "</td>";
+                echo "<td>" . $row["act"] . "</td>";
+                echo "<td>" . $row["stock"] . "</td>";
+                echo "<td class='text-center'>
             <a href='./motos/edit.php?code_model=" . $row["code_model"] . "' class='btn btn-outline-success rounded-circle'>
             <i class='fa-solid fa-pen-to-square'></i>
             </a>
@@ -185,9 +194,10 @@ $act = $field == 6 ? "Selected" : "";
             <i class='fa-solid fa-trash-can'></i>
             </a>
           </td>";
-            echo "</tr>";
-        }
-        ?>
-    </tbody>
-</table>
+                echo "</tr>";
+            }
+            ?>
+        </tbody>
+    </table>
+</div>
 <?php include 'layout/Pagination.php'; ?>

@@ -22,12 +22,14 @@ if (!isset($_SESSION['full_name'])) {
             
 
             <div class="dropdown">
-                <a href="#" class="text-light fs-4" data-bs-toggle="dropdown">
-                    <i class="fa-solid fa-circle-user"></i>
+                <a href="#" class="d-flex align-items-center text-decoration-none" data-bs-toggle="dropdown">
+                    <?php $header_pic = !empty($_SESSION['profile_img']) ? $_SESSION['profile_img'] : 'default.jpg'; ?>
+                    <img src="./image/profile/<?php echo $header_pic; ?>" alt="User" 
+                         class="rounded-circle border border-light shadow-sm" style="width: 35px; height: 35px; object-fit: cover;">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end shadow">
                     <li>
-                        <a class="dropdown-item" href="profile.php?uerid=<?php echo $_SESSION['userid']; ?>">
+                        <a class="dropdown-item" href="profile.php?userid=<?php echo $_SESSION['userid']; ?>">
                             <i class="fa-solid fa-user me-1"></i>Profile</a>
                     </li>
                     <li>

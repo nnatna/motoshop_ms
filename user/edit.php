@@ -3,28 +3,70 @@ session_start();
 if (isset($_SESSION['full_name'])) {;
 } else {
     header("Location:../login.php");
-} ?>
+}
+if (isset($_POST['btnsubmit'])) {
+    require("../db.php");
+    $userid = $_GET["userid"];
+    $fullname = $_POST["full_name"];
+    $username = $_POST["username"];
+
+    $sql_check = "SELECT username FROM tbluser WHERE username = ? AND userid != ?";
+    $stmt_check = $conn->prepare($sql_check);
+    $stmt_check->bind_param("si", $username, $userid);
+    $stmt_check->execute();
+    $result_check = $stmt_check->get_result();
+
+    if ($row = $result_check->fetch_assoc()) {
+        $error_username = "Username already exists. Please choose another.";
+    }
+
+    $password = $_POST["password"];
+    $cpassword = $_POST["cpassword"];
+    $role = $_POST["role"];
+
+    if (!empty($password) && $password !== $cpassword) {
+        $error_password = "Passwords do not match!";
+    }
+    if (!empty($password)) {
+        $hashed_password = md5($password);
+        $sql = "UPDATE tbluser SET full_name=?, username=?, password=?, role=? WHERE userid=?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssssi", $fullname, $username, $hashed_password, $role, $userid);
+    } else {
+        $sql = "UPDATE tbluser SET full_name=?, username=?, role=? WHERE userid=?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sssi", $fullname, $username, $role, $userid);
+    }
+
+    if ($stmt->execute()) {
+        if (isset($_FILES['profile']) && !empty($_FILES['profile']['tmp_name'])) {
+            $extension = pathinfo($_FILES['profile']['name'], PATHINFO_EXTENSION);
+            $profile_img = "profile" . $userid . "." . $extension;
+
+            if (move_uploaded_file($_FILES['profile']['tmp_name'], "../image/profile/$profile_img")) {
+                $conn->query("UPDATE tbluser SET profile_img='$profile_img' WHERE userid=$userid");
+            }
+        }
+        header("Location: ../user.php");
+        exit();
+    } else {
+        echo "Error: " . $conn->error;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add New Motorcycle</title>
+    <title>Edit User</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/form.css">
     <script src="../assets/js/form.js"></script>
-    <style>
-        body {
-            background-color: #f4f6f9;
-        }
-
-        .card {
-            min-width: 400px;
-        }
-    </style>
 </head>
 
 <body>
@@ -48,45 +90,56 @@ if (isset($_SESSION['full_name'])) {;
                     $f = $row["full_name"];
                     $u = $row["username"];
                     $r = $row["role"];
+                    $pic = $row["profile_img"];
             ?>
                     <form method="post" class="p-4" enctype="multipart/form-data">
                         <div class="mb-3 text-center">
                             <div class="position-relative d-inline-block">
-                                <img src="../image/profile/<?php echo $row['profile_img'] ?>"
+                                <img src="../image/profile/<?php echo !empty($pic) ? $pic : 'default.jpg' ?>"
                                     id="picture"
                                     class="rounded-circle img-thumbnail"
                                     style="width: 150px; height: 150px; object-fit: cover; cursor: pointer;"
                                     onclick="document.getElementById('profile').click();"
                                     title="Click to change photo">
-                                <div class="position-absolute bottom-0 end-0 bg-dark text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" 
-                                     style="width: 40px; height: 40px; cursor: pointer; border: 3px solid white;"
-                                     onclick="document.getElementById('profile').click();">
+                                <div class="position-absolute bottom-0 end-0 bg-dark text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm"
+                                    style="width: 40px; height: 40px; cursor: pointer; border: 3px solid white;"
+                                    onclick="document.getElementById('profile').click();">
                                     <i class="fas fa-camera"></i>
                                 </div>
                             </div>
                             <p class="text-muted small mt-2">Click image to upload new photo</p>
                         </div>
+                        <div>
+                            <?php
+                            if (isset($error_username)) {
+                                echo "<div class='alert alert-danger p-1 text-center'>$error_username</div>";
+                            }
+                            if (isset($error_password)) {
+                                echo "<div class='alert alert-danger p-1 text-center'>$error_password</div>";
+                            }
+                            ?>
+                        </div>
                         <div class="mb-3">
                             <label for="full_name" class="form-label text-muted fw-bold">Full Name</label>
-                            <input type="text" class="form-control rounded-pill" id="full_name" name="full_name" placeholder="Enter full name"
+                            <input type="text" class="form-control shadow border-dark-subtle rounded-pill" id="full_name" name="full_name" placeholder="Enter full name"
                                 value="<?php echo ($f) ?>" required>
                         </div>
                         <div class="mb-3">
                             <label for="username" class="form-label text-muted fw-bold">Username</label>
-                            <input type="text" class="form-control rounded-pill" id="username" name="username" placeholder="Enter username"
+                            <input type="text" class="form-control shadow border-dark-subtle rounded-pill" id="username" name="username" placeholder="Enter username"
                                 value="<?php echo ($u) ?>" required>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label text-muted fw-bold">New Password</label>
-                            <input type="password" class="form-control rounded-pill" id="password" name="password" placeholder="Enter new password">
+                            <input type="password" class="form-control shadow border-dark-subtle rounded-pill" id="password" name="password" placeholder="Enter new password">
                         </div>
                         <div class="mb-3">
                             <label for="cpassword" class="form-label text-muted fw-bold">Confirm New Password</label>
-                            <input type="password" class="form-control rounded-pill" id="cpassword" name="cpassword" placeholder="Enter confirm new password">
+                            <input type="password" class="form-control shadow border-dark-subtle rounded-pill" id="cpassword" name="cpassword" placeholder="Enter confirm new password">
                         </div>
                         <div class="mb-3">
                             <label for="role" class="form-label text-muted fw-bold">Role</label>
-                            <select class="form-select rounded-pill" id="role" name="role" required>
+                            <select class="form-select shadow border-dark-subtlerounded-pill" id="role" name="role" required>
                                 <?php
                                 $sql = "SELECT * FROM tbluser";
                                 if ($r == "Admin") {
@@ -112,50 +165,6 @@ if (isset($_SESSION['full_name'])) {;
             }
             ?>
         </div>
-        <?php
-        if (isset($_POST['btnsubmit'])) {
-            require("../db.php");
-            $userid = $_GET["userid"];
-            $fullname = $_POST["full_name"];
-            $username = $_POST["username"];
-            $password = $_POST["password"];
-            $cpassword = $_POST["cpassword"];
-            $role = $_POST["role"];
-
-            if (!empty($password) && $password !== $cpassword) {
-                die("<p style='color:red;'>password and confirm-password do not match!!</p>");
-            }
-
-            // Update basic info. Only update password if a new one is typed.
-            if (!empty($password)) {
-                $hashed_password = md5($password);
-                $sql = "UPDATE tbluser SET full_name=?, username=?, password=?, role=? WHERE userid=?";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("ssssi", $fullname, $username, $hashed_password, $role, $userid);
-            } else {
-                $sql = "UPDATE tbluser SET full_name=?, username=?, role=? WHERE userid=?";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("sssi", $fullname, $username, $role, $userid);
-            }
-
-            if ($stmt->execute()) {
-                // Handle Profile Picture update separately
-                if (isset($_FILES['profile']) && !empty($_FILES['profile']['tmp_name'])) {
-                    $extension = pathinfo($_FILES['profile']['name'], PATHINFO_EXTENSION);
-                    $profile_img = "profile" . $userid . "." . $extension;
-
-                    // Correcting path to go up one level to find the image folder
-                    if (move_uploaded_file($_FILES['profile']['tmp_name'], "../image/profile/$profile_img")) {
-                        $conn->query("UPDATE tbluser SET profile_img='$profile_img' WHERE userid=$userid");
-                    }
-                }
-                header("Location: ../user.php");
-                exit();
-            } else {
-                echo "Error: " . $conn->error;
-            }
-        }
-        ?>
     </div>
     </div>
 </body>

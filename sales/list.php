@@ -19,10 +19,10 @@ $modname_sel = $field == 3 ? "selected" : "";
 $date_sel    = $field == 4 ? "selected" : "";
 
 //sort
-$sort_column = "s.saleid";
-if ($field == "2") $sort_column = "c.cusname";
-if ($field == "3") $sort_column = "m.modname";
-if ($field == "4") $sort_column = "s.saledate";
+$sort_column = "saleid";
+if ($field == "2") $sort_column = "cusname";
+if ($field == "3") $sort_column = "modname";
+if ($field == "4") $sort_column = "saledate";
 
 $sort_order = "DESC";
 if (isset($_POST['btnasc'])) $sort_order = "ASC";
@@ -35,7 +35,7 @@ if (isset($_POST['btndesc'])) $sort_order = "DESC";
             <div class="col-auto">
                 <select name="txtfield" class="form-select rounded-pill" required>
                     <option value="">Choose field</option>
-                    <option value="1" <?php echo $saleid_sel ?>>Sale ID</option>
+                    <option value="1" <?php echo $saleid_sel ?>>ID</option>
                     <option value="2" <?php echo $cusname_sel ?>>Customer</option>
                     <option value="3" <?php echo $modname_sel ?>>Motorcycle</option>
                     <option value="4" <?php echo $date_sel ?>>Sale Date</option>
@@ -72,15 +72,16 @@ if (isset($_POST['btndesc'])) $sort_order = "DESC";
     </form>
 </fieldset>
 
-<table class="table table-hover text-center align-middle mb-0">
+<div class="table-responsive bg-white rounded-4 shadow-sm p-3">
+    <table class="table table-hover align-middle">
     <thead>
-        <tr class="table-secondary fs-5">
-            <th class="text-center">ID</th>
-            <th class="text-center">Customer</th>
-            <th class="text-center">Model</th>
-            <th class="text-center">Qty</th>
-            <th class="text-center">Amount</th>
-            <th class="text-center">Sale Date</th>
+        <tr class="table-secondary">
+            <th>ID</th>
+            <th>Customer</th>
+            <th>Motorcycle</th>
+            <th>Quantity</th>
+            <th>Amount</th>
+            <th>Sale Date</th>
             <th class="text-center">Options</th>
         </tr>
     </thead>
@@ -90,25 +91,23 @@ if (isset($_POST['btndesc'])) $sort_order = "DESC";
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $start = ($page - 1) * $limit;
 
-        $sql_base = "FROM tblSales s 
-                     JOIN tblCustomers c ON s.cusid = c.cusid 
-                     JOIN tblModel m ON s.code_model = m.code_model";
+        $sql_base = " FROM vsales ";
 
         $where = "";
         //search
         if (!empty($search) && !empty($field)) {
             switch ($field) {
                 case '1':
-                    $where = " WHERE s.saleid LIKE '%$search%'";
+                    $where = " WHERE saleid LIKE '%$search%'";
                     break;
                 case '2':
-                    $where = " WHERE c.cusname LIKE '%$search%'";
+                    $where = " WHERE cusname LIKE '%$search%'";
                     break;
                 case '3':
-                    $where = " WHERE m.modname LIKE '%$search%'";
+                    $where = " WHERE modname LIKE '%$search%'";
                     break;
                 case '4':
-                    $where = " WHERE s.saledate LIKE '%$search%'";
+                    $where = " WHERE saledate LIKE '%$search%'";
                     break;
             }
         }
@@ -119,8 +118,7 @@ if (isset($_POST['btndesc'])) $sort_order = "DESC";
         $total_results = $conn->query($sql_total)->fetch_assoc()['total'];
         $pages = ceil($total_results / $limit);
 
-        $sql_final = "SELECT s.saleid, c.cusname, m.modname, s.quantity, s.amount, s.saledate " .
-            $sql_base . $where . $order_by . " LIMIT $start, $limit";
+        $sql_final = "SELECT * " . $sql_base . $where . $order_by . " LIMIT $start, $limit";
 
         $result = $conn->query($sql_final);
 
@@ -128,12 +126,12 @@ if (isset($_POST['btndesc'])) $sort_order = "DESC";
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
                 echo "<td>#" . $row["saleid"] . "</td>";
-                echo "<td>" . $row["cusname"] . "</td>";
-                echo "<td>" . $row["modname"] . "</td>";
+                echo "<td class='fw-medium'>" . $row["cusname"] . "</td>";
+                echo "<td class='fw-medium'>" . $row['braname'] . " " . $row['modname'] . "</td>";
                 echo "<td>" . $row["quantity"] . "</td>";
                 echo "<td class='fw-medium text-success'>$" . number_format($row["amount"], 2) . "</td>";
                 echo "<td>" . date('d-M-Y H:i', strtotime($row["saledate"])) . "</td>";
-                echo "<td>
+                echo "<td class='text-center'>
                         <a href='sales/edit.php?saleid=" . $row["saleid"] . "' class='btn btn-outline-success rounded-circle'>
                         <i class='fa-solid fa-pen-to-square'></i>
                         </a>
@@ -149,5 +147,6 @@ if (isset($_POST['btndesc'])) $sort_order = "DESC";
         ?>
     </tbody>
 </table>
+</div>
 
 <?php include 'layout/Pagination.php'; ?>

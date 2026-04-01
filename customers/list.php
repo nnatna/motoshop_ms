@@ -65,13 +65,14 @@ $sel_address = ($field == "5") ? "selected" : "";
     </form>
 </fieldset>
 
-<table id="Table" class="table table-hover text-center align-middle mb-0">
+<div class="table-responsive bg-white rounded-4 shadow-sm p-3">
+    <table id="Table" class="table table-hover align-middle">
     <thead>
-        <tr class="table-secondary fs-5">
+        <tr class="table-secondary">
             <th>ID</th>
-            <th> Name</th>
+            <th>Name</th>
             <th>Gender</th>
-            <th>Phone</th>
+            <th>Phone Number</th>
             <th>Address</th>
             <th class="text-center">Options</th>
         </tr>
@@ -122,7 +123,7 @@ $sel_address = ($field == "5") ? "selected" : "";
         while ($row = $result->fetch_assoc()) {
             echo "<tr>";
             echo "<td>#" . $row["cusid"] . "</td>";
-            echo "<td>" . $row["cusname"] . "</td>";
+            echo "<td class='fw-medium'>" . $row["cusname"] . "</td>";
             echo "<td>" . $row["gender"] . "</td>";
             echo "<td>" . $row["phone"] . "</td>";
             echo "<td>" . $row["address"] . "</td>";
@@ -142,5 +143,6 @@ $sel_address = ($field == "5") ? "selected" : "";
     ?>
 </tbody>
 </table>
+</div>
 
 <?php include 'layout/Pagination.php'; ?>
