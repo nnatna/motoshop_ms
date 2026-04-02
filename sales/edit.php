@@ -26,7 +26,7 @@ if (isset($_POST["submit"])) {
 
     $sql_update = "UPDATE tblSales SET cusid=?, code_model=?, quantity=?, amount=?, saledate=?, userid=? WHERE saleid=?";
     $stmt_up = $conn->prepare($sql_update);
-    $stmt_up->bind_param("iiidsi", $cusid, $code_model, $quantity, $amount, $saledate, $_SESSION['userid'], $saleid);
+    $stmt_up->bind_param("iiidsii", $cusid, $code_model, $quantity, $amount, $saledate, $_SESSION['userid'], $saleid);
     if ($stmt_up->execute()) {
         header("Location: ../sales.php");
         exit();

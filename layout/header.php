@@ -19,8 +19,6 @@ if (!isset($_SESSION['full_name'])) {
         </a>
 
         <div class="ms-auto d-flex align-items-center">
-            
-
             <div class="dropdown">
                 <a href="#" class="d-flex align-items-center text-decoration-none" data-bs-toggle="dropdown">
                     <?php $header_pic = !empty($_SESSION['profile_img']) ? $_SESSION['profile_img'] : 'default.jpg'; ?>

@@ -4,11 +4,18 @@ body {
     flex-direction: column;
     background-color: #f4f6f9;
 }
+
+.hover-bg-secondary:hover {
+    background-color: #6c757d;
+    color: white !important;
+}
+
 .main-wrapper {
     flex: 1;
     display: flex;
     overflow: hidden;
 }
+
 .sidebar-wrapper {
     width: 280px;
     background-color: #fff;
@@ -17,11 +24,13 @@ body {
     min-height: 100%;
     overflow-y: auto;
 }
+
 .content-wrapper {
     flex: 1;
     padding: 2rem;
     overflow-y: auto;
 }
+
 @media (max-width: 768px) {
     .sidebar-wrapper {
         position: absolute;
@@ -33,14 +42,31 @@ body {
         background-color: #fff;
         overflow-y: auto;
     }
+
     .sidebar-wrapper.show {
         left: 0 !important;
     }
+
     #sidebar.show {
         left: 0 !important;
     }
 }
+
 .pic {
     width: 60px;
     height: auto;
+}
+.nav-pills .nav-link.active {
+    background-color: #212529 !important;
+    color: #ffffff !important;
+}
+
+.nav-pills .nav-link {
+    color: #212529;
+    transition: all 0.2s ease;
+}
+
+.nav-pills .nav-link:hover {
+    color: #ffffff;
+    background-color: #6c757d;
 }

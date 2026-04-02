@@ -103,10 +103,10 @@ FROM tblSales s
 JOIN tblCustomers c ON s.cusid  = c.cusid        
 JOIN tblModel     m ON s.code_model  = m.code_model        
 JOIN tblBrand     b ON m.braid  = b.braid;       
-
+      
 SELECT * FROM vsales;
 
-CREATE OR REPLACE VIEW vsales_report AS
+CREATE OR REPLACE VIEW vcustomer_report AS
 SELECT 
     s.saledate,
     c.cusname,
@@ -120,7 +120,31 @@ JOIN tbluser u ON s.userid = u.userid
 JOIN tblCustomers c ON s.cusid  = c.cusid        
 JOIN tblModel     m ON s.code_model  = m.code_model        
 JOIN tblBrand     b ON m.braid  = b.braid;       
+      
+SELECT * FROM vcustomer_report;
 
-SELECT * FROM vsales_report;
+CREATE OR REPLACE VIEW vemployee_report AS
+SELECT 
+    u.userid, 
+    u.full_name, 
+    u.role,
+    COALESCE(COUNT(s.saledate), 0) AS sale_date,
+    COUNT(s.saleid) AS total_sales_count,
+    COALESCE(SUM(s.amount), 0) AS total_sales_amount
+FROM tbluser u
+LEFT JOIN tblSales s ON u.userid = s.userid
+GROUP BY u.userid, u.full_name, u.role;   
+      
+SELECT * FROM vemployee_report;
 
-
+CREATE OR REPLACE VIEW vmotos_report AS
+SELECT 
+    m.code_model, 
+    m.braname, 
+    m.modname, 
+    m.year,
+    s.saledate,
+    s.saleid,
+    COALESCE(s.amount, 0) AS sale_price
+FROM tblmotos m
+LEFT JOIN tblSales s ON m.code_model = s.code_model;

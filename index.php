@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="./assets/css/layout.css">
+    <link rel="stylesheet" href="./assets/css/layout.css?v=1">
 </head>
 
 <body>
@@ -34,7 +34,7 @@
                     <div class="col-md-auto">
                         <label class="form-label small fw-bold">Start Date</label>
                         <input type="date" name="startdate" class="form-control form-control shadow-none border-dark-subtle rounded-pill"
-                            value="<?php echo $_POST['startdate'] ?? date('Y-m-01'); ?>">
+                            value="<?php echo $_POST['startdate'] ?? date('Y-m-01', strtotime('-1 month')); ?>">
                     </div>
                     <div class="col-md-auto">
                         <label class="form-label small fw-bold">End Date</label>

@@ -17,7 +17,8 @@ $linkBaseInactive = 'nav-link text-dark rounded hover-bg-secondary';
     <hr>
     <ul class="nav flex-column mb-auto px-2">
         <li class="nav-item fw-medium mb-1">
-            <a href="index.php" class="<?php echo ($currentPage === 'index.php') ? $linkBaseActive : $linkBaseInactive; ?>">
+            <a href="index.php" class="
+            <?php echo ($currentPage === 'index.php') ? $linkBaseActive : $linkBaseInactive; ?>">
                 <i class="fa-solid fa-house me-1"></i>Dashboard
             </a>
         </li>
