@@ -1,3 +1,12 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if (!isset($_SESSION['userid'])) {
+    header("Location: login.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,29 +19,27 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="./assets/css/layout.css?v=1">
+    <script src="./assets/js/form.js?v=1"></script>
 </head>
 
 <body>
     <?php include 'layout/header.php'; ?>
     <div class="main-wrapper">
         <?php include 'layout/sidebar.php'; ?>
-        <main class="content-wrapper">
-            <div class="d-flex justify-content-between align-items-center mb-3">
+        <main class="content-wrapper d-flex">
+            <div class="col-lg-3 p-4">
                 <div>
-                    <h3 class="fw-bold text-success"><i class="fa-solid fa-gear me-1"></i>Setting</h3>
+                    <h3 class="fw-bold text-success"><i class="fa-solid fa-gear me-1"></i>Settings</h3>
                     <p class="text-muted">Manage system settings and configurations</p>
                 </div>
-                <div>
-                    <button type="button" class="btn btn-success rounded-pill fw-bold" onclick="window.print()">
-                        <i class="bi bi-printer-fill me-1"></i> Print Report
-                    </button>
-                </div>
+                <?php include 'layout/setting_sidebar.php'; ?>
+            </div>
+            <div class="col-lg-9 p-4 border-start">
+                <?php include 'profile.php'; ?>
             </div>
         </main>
     </div>
     <?php include 'layout/footer.php'; ?>
 </body>
-
-</html>
 
 </html>

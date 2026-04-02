@@ -1,8 +1,5 @@
 <?php 
 require '../db.php';
-
-// ១. ពិនិត្យមើលថា តើក្នុង URL គេប្រើពាក្យ 'id' ឬ 'cusid'
-// បើក្នុងប៊ូតុងលុបសរសេរថា delete.php?id=... ត្រូវប្រើ $_GET["id"]
 $id = isset($_GET["id"]) ? $_GET["id"] : (isset($_GET["cusid"]) ? $_GET["cusid"] : null);
 
 if ($id) {

@@ -5,7 +5,7 @@
     </div>
     <div>
         <a href="customers/add.php" class="btn btn-success rounded-pill fw-bold">
-            <i class="bi bi-plus-circle me-1"></i>Add Customer
+            <i class="bi bi-plus-circle me-1"></i>Customer
         </a>
     </div>
 </div>

@@ -1,9 +1,9 @@
 <?php
+require("db.php");
 if (isset($_POST['submit'])) {
     $u = $_POST["username"];
     $p = md5($_POST["password"]);
     $sql = "SELECT userid, full_name, username, role, profile_img FROM tbluser WHERE username=? AND password=?;";
-    require("db.php");
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ss", $u, $p);
     $stmt->execute();
@@ -17,7 +17,7 @@ if (isset($_POST['submit'])) {
         $_SESSION['profile_img'] = $row['profile_img'];
         header("Location: ./index.php");
     } else {
-       $error = "Invalid username or password!!";
+        $error = "Invalid username or password!!";
     }
 }
 ?>
@@ -41,11 +41,18 @@ if (isset($_POST['submit'])) {
 
     <div class="d-flex justify-content-center align-items-center vh-100">
         <div class="card rounded-4 shadow">
-            <div class="bg-dark p-2 text-center m-0 rounded-top-4">
-                <div class="mb-2">
-                    <i class="bi bi-person-circle text-light" style="font-size: 3rem;"></i>
-                </div>
-                <h3 class="text-center text-light fw-bold p-2">MotoShop</h3>
+            <div class="bg-dark d-flex flex-column align-items-center py-4 text-center m-0 rounded-top-4">
+                <?php
+                $logoQuery = $conn->query("SELECT logo FROM tbllogo WHERE id = 1");
+                $logoRow = $logoQuery->fetch_assoc();
+                if ($logoRow) {
+                    $logo = $logoRow['logo'];
+                } else {
+                    $logo = 'default.jpg';
+                }
+                ?>
+                <img src="./image/logo/<?php echo $logo; ?>" alt="Logo" class="me-2 rounded-circle border border-light shadow-sm" style="width: 80px; height: 80px; object-fit: cover;">
+                <h3 class="text-white fw-bold mt-2 mb-0">MotoShop</h3>
             </div>
             <form method="post" class="p-4">
                 <div class="mb-4 text-center">

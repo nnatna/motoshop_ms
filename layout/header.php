@@ -14,11 +14,21 @@ if (!isset($_SESSION['full_name'])) {
         </button>
 
         <a class="navbar-brand fw-bold d-flex align-items-center" href="index.php">
-            <i class="bi bi-hexagon-fill text-primary me-2 fs-4"></i>
+            <?php
+            require("db.php");
+            $logoQuery = $conn->query("SELECT logo FROM tbllogo WHERE id = 1");
+            $logoRow = $logoQuery->fetch_assoc();
+            if ($logoRow) {
+                $logo = $logoRow['logo'];
+            } else {
+                $logo = 'default.jpg';
+            }
+            ?>
+            <img src="./image/logo/<?php echo $logo; ?>" alt="Logo" class="me-2 rounded-circle border border-light shadow-sm" style="width: 35px; height: 35px; object-fit: cover;">
             <span class="brand-text d-none d-md-inline">MotoShop Management System</span>
         </a>
 
-        <div class="ms-auto d-flex align-items-center">
+        <div class="ms-auto d-flex">
             <div class="dropdown">
                 <a href="#" class="d-flex align-items-center text-decoration-none" data-bs-toggle="dropdown">
                     <?php $header_pic = !empty($_SESSION['profile_img']) ? $_SESSION['profile_img'] : 'default.jpg'; ?>
@@ -27,7 +37,7 @@ if (!isset($_SESSION['full_name'])) {
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end shadow">
                     <li>
-                        <a class="dropdown-item" href="profile.php?userid=<?php echo $_SESSION['userid']; ?>">
+                        <a class="dropdown-item" href="settings.php?userid=<?php echo $_SESSION['userid']; ?>">
                             <i class="fa-solid fa-user me-1"></i>Profile</a>
                     </li>
                     <li>

@@ -24,12 +24,12 @@ $linkBaseInactive = 'nav-link text-dark rounded hover-bg-secondary';
         </li>
         <li class="nav-item fw-medium mb-1">
             <a href="motos.php" class="<?php echo ($currentPage === 'motos.php') ? $linkBaseActive : $linkBaseInactive; ?>">
-                <i class="fa-solid fa-motorcycle me-1"></i>Motorcycle
+                <i class="fa-solid fa-motorcycle me-1"></i>Motorcycles
             </a>
         </li>
         <li class="nav-item fw-medium mb-1">
             <a href="customer.php" class="<?php echo ($currentPage === 'customer.php') ? $linkBaseActive : $linkBaseInactive; ?>">
-                <i class="fa-solid fa-user-group me-1"></i>Customer
+                <i class="fa-solid fa-user-group me-1"></i>Customers
             </a>
         </li>
         <li class="nav-item fw-medium mb-1">
@@ -45,12 +45,12 @@ $linkBaseInactive = 'nav-link text-dark rounded hover-bg-secondary';
         <?php if (isset($_SESSION['role']) && $_SESSION['role'] == 'Admin'): ?>
             <li class="nav-item fw-medium mb-1">
                 <a href="user.php" class="<?php echo ($currentPage === 'user.php') ? $linkBaseActive : $linkBaseInactive; ?>">
-                    <i class="fa-solid fa-user me-1"></i>User
+                    <i class="fa-solid fa-user me-1"></i>Users
                 </a>
             </li>
         <?php endif; ?>
         <li class="nav-item fw-medium mb-1">
-            <a href="settings.php" class="nav-link text-dark rounded hover-bg-secondary">
+            <a href="settings.php" class="<?php echo ($currentPage === 'settings.php') ? $linkBaseActive : $linkBaseInactive; ?>">
                 <i class="fa-solid fa-gear me-1"></i>Settings
             </a>
         </li>

@@ -1,6 +1,7 @@
 function showimg() {
     var input = document.getElementById("profile") || 
                 document.getElementById("image") || 
+                document.getElementById("logo") || 
                 (document.getElementById("previewImage") ? document.getElementById("previewImage").previousElementSibling : null);
 
     if (!input || !input.files || !input.files[0]) return;
@@ -12,7 +13,6 @@ function showimg() {
         if (img) {
             img.src = event.target.result;
             img.classList.remove("d-none");
-            // Hide the icon placeholder if it exists
             var placeholder = document.getElementById("uploadPlaceholder");
             if (placeholder) placeholder.classList.add("d-none");
         }
