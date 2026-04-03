@@ -17,7 +17,7 @@
     <?php include 'layout/header.php'; ?>
     <?php
     require("db.php");
-    $start = $_POST['startdate'] ?? date('Y-m-t', strtotime('-1 month'));
+    $start = $_POST['startdate'] ?? date('Y-m-01');
     $end = $_POST['enddate'] ?? date('Y-m-t');
 
     // Pagination logic
@@ -25,8 +25,11 @@
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     $start_from = ($page - 1) * $limit;
 
-    $count_sql = "SELECT COUNT(*) as total FROM tblsales WHERE saledate BETWEEN '$start' AND '$end'";
-    $total_results = $conn->query($count_sql)->fetch_assoc()['total'];
+    $count_sql = "SELECT COUNT(*) as total FROM tblsales WHERE saledate BETWEEN ? AND ?";
+    $stmt_count = $conn->prepare($count_sql);
+    $stmt_count->bind_param("ss", $start, $end);
+    $stmt_count->execute();
+    $total_results = $stmt_count->get_result()->fetch_assoc()['total'];
     $pages = ceil($total_results / $limit);
     ?>
     <div class="main-wrapper">
@@ -44,7 +47,7 @@
                 </div>
             </div>
 
-            <div class="bg-white p-3 rounded-4 shadow-sm mb-4">
+            <div class="card bg-white p-3 rounded-4 mb-4">
                 <form method="post" class="row g-3 align-items-end">
                     <div class="col-md-auto">
                         <label class="form-label small fw-bold text-muted">From Date</label>
@@ -61,7 +64,7 @@
                     </div>
                 </form>
             </div>
-            <div class="bg-white p-3 rounded-4 shadow-sm mb-4">
+            <div class="card bg-white p-3 rounded-4 mb-4">
                 <ul class="nav nav-pills d-flex justify-content-center gap-3" id="pills-tab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active px-4" id="pills-customer-tab" data-bs-toggle="pill" data-bs-target="#customer_report" type="button" role="tab">Customer Report</button>
@@ -70,7 +73,10 @@
                         <button class="nav-link px-4" id="pills-employee-tab" data-bs-toggle="pill" data-bs-target="#employee_report" type="button" role="tab">Employee Report</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link px-4" id="pills-motos-tab" data-bs-toggle="pill" data-bs-target="#motos_report" type="button" role="tab">Motos Report</button>
+                        <button class="nav-link px-4" id="pills-motos-tab" data-bs-toggle="pill" data-bs-target="#motos_report" type="button" role="tab">Motorcycle Report</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link px-4" id="pills-sales-tab" data-bs-toggle="pill" data-bs-target="#hard_to_sell_report" type="button" role="tab">Hard To Sell Report</button>
                     </li>
                 </ul>
             </div>
@@ -83,6 +89,9 @@
                 </div>
                 <div class="tab-pane fade" id="motos_report" role="tabpanel">
                     <?php include 'reports/motos_report.php'; ?>
+                </div>
+                <div class="tab-pane fade" id="hard_to_sell_report" role="tabpanel">
+                    <?php include 'reports/hard_to_sell_report.php'; ?>
                 </div>
             </div>
 

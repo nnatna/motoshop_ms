@@ -1,4 +1,4 @@
-<div class="table-responsive bg-white rounded-4 shadow-sm p-3" id="sales_report">
+<div class="card table-responsive bg-white rounded-4 shadow-sm p-3" id="sales_report">
     <h5 class="text-success text-center fw-bold">Customer Report</h5>
     <table class="table table-hover align-middle">
         <thead class="table-light">

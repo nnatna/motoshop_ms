@@ -43,16 +43,17 @@ if (isset($_POST['submit'])) {
         <div class="card rounded-4 shadow">
             <div class="bg-dark d-flex flex-column align-items-center py-4 text-center m-0 rounded-top-4">
                 <?php
-                $logoQuery = $conn->query("SELECT logo FROM tbllogo WHERE id = 1");
+                $logoQuery = $conn->query("SELECT shop, logo FROM tbllogo WHERE id = 1");
                 $logoRow = $logoQuery->fetch_assoc();
+                $logo = 'default.jpg';
+                $shopName = 'MotoShop';
                 if ($logoRow) {
-                    $logo = $logoRow['logo'];
-                } else {
-                    $logo = 'default.jpg';
+                    $logo = !empty($logoRow['logo']) ? $logoRow['logo'] : 'default.jpg';
+                    $shopName = !empty($logoRow['shop']) ? $logoRow['shop'] : $shopName;
                 }
                 ?>
-                <img src="./image/logo/<?php echo $logo; ?>" alt="Logo" class="me-2 rounded-circle border border-light shadow-sm" style="width: 80px; height: 80px; object-fit: cover;">
-                <h3 class="text-white fw-bold mt-2 mb-0">MotoShop</h3>
+                <img src="./image/logo/<?php echo htmlspecialchars($logo, ENT_QUOTES); ?>" alt="Logo" class="me-2 rounded-circle border border-light shadow-sm" style="width: 80px; height: 80px; object-fit: cover;">
+                <h3 class="text-white fw-bold mt-2 mb-0"><?php echo htmlspecialchars($shopName, ENT_QUOTES); ?></h3>
             </div>
             <form method="post" class="p-4">
                 <div class="mb-4 text-center">

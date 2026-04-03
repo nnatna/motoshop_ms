@@ -65,7 +65,7 @@ $sel_address = ($field == "5") ? "selected" : "";
     </form>
 </fieldset>
 
-<div class="table-responsive bg-white rounded-4 shadow-sm p-3">
+<div class="card table-responsive bg-white rounded-4 p-3">
     <table id="Table" class="table table-hover align-middle">
     <thead>
         <tr class="table-secondary">

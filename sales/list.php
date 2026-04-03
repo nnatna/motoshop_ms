@@ -33,7 +33,7 @@ if (isset($_POST['btndesc'])) $sort_order = "DESC";
     <form method="post" class="d-flex justify-content-between mb-3">
         <div class="text-start row g-3 align-items-center">
             <div class="col-auto">
-                <select name="txtfield" class="form-select rounded-pill" required>
+                <select name="txtfield" class="form-select shadow-none border-dark-subtle rounded-pill" required>
                     <option value="">Choose field</option>
                     <option value="1" <?php echo $saleid_sel ?>>ID</option>
                     <option value="2" <?php echo $cusname_sel ?>>Customer</option>
@@ -72,7 +72,7 @@ if (isset($_POST['btndesc'])) $sort_order = "DESC";
     </form>
 </fieldset>
 
-<div class="table-responsive bg-white rounded-4 shadow-sm p-3">
+<div class="card table-responsive bg-white rounded-4 p-3">
     <table class="table table-hover align-middle">
     <thead>
         <tr class="table-secondary">

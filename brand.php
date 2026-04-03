@@ -75,7 +75,7 @@ if (isset($_POST['btnsubmit'])) {
                         <?php if (isset($success)): ?>
                             <div class="alert alert-success py-2 mx-4 text-center"><?php echo $success; ?></div>
                         <?php endif; ?>
-                        <div class="table-responsive bg-white rounded-4 shadow-sm p-3">
+                        <div class="card table-responsive bg-white rounded-4 p-3">
                             <table class="table table-hover align-middle">
                                 <tr class="table-secondary">
                                     <th>Brand ID</th>

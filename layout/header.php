@@ -16,16 +16,17 @@ if (!isset($_SESSION['full_name'])) {
         <a class="navbar-brand fw-bold d-flex align-items-center" href="index.php">
             <?php
             require("db.php");
-            $logoQuery = $conn->query("SELECT logo FROM tbllogo WHERE id = 1");
+            $logoQuery = $conn->query("SELECT shop, logo FROM tbllogo WHERE id = 1");
             $logoRow = $logoQuery->fetch_assoc();
+            $logo = 'default.jpg';
+            $shopName = 'Moto Shop';
             if ($logoRow) {
-                $logo = $logoRow['logo'];
-            } else {
-                $logo = 'default.jpg';
+                $logo = !empty($logoRow['logo']) ? $logoRow['logo'] : 'default.jpg';
+                $shopName = !empty($logoRow['shop']) ? $logoRow['shop'] : $shopName;
             }
+            echo "<img src='./image/logo/" . htmlspecialchars($logo, ENT_QUOTES) . "' alt='Logo' class='me-2 rounded-circle border border-light shadow-sm' style='width: 35px; height: 35px; object-fit: cover;'>";
+            echo "<span class='brand-text d-none d-md-inline'>" . htmlspecialchars($shopName, ENT_QUOTES) . "</span>";
             ?>
-            <img src="./image/logo/<?php echo $logo; ?>" alt="Logo" class="me-2 rounded-circle border border-light shadow-sm" style="width: 35px; height: 35px; object-fit: cover;">
-            <span class="brand-text d-none d-md-inline">MotoShop Management System</span>
         </a>
 
         <div class="ms-auto d-flex">

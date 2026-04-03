@@ -1,4 +1,4 @@
-<div class="table-responsive bg-light text-white rounded-4 shadow-sm p-3">
+<div class="table-responsive bg-white text-dark rounded-4 shadow-sm p-3">
     <h5 class="text-success text-center fw-bold">Employee Report</h5>
     <table class="table table-hover align-middle">
         <thead class="table-dark">

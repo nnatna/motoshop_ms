@@ -139,12 +139,66 @@ SELECT * FROM vemployee_report;
 
 CREATE OR REPLACE VIEW vmotos_report AS
 SELECT 
+	m.code_model, 
+	b.braname, 
+	m.modname, 
+	m.color, 
+	m.year, 
+	m.price, 
+	COALESCE(SUM(s.quantity), 0) AS total_sold, 
+	COALESCE(SUM(s.amount), 0) AS total_amount
+FROM tblSales s
+JOIN tblModel m ON s.code_model = m.code_model
+JOIN tblBrand b ON m.braid = b.braid
+GROUP BY m.code_model, b.braname, m.modname, m.color, m.year, m.price
+ORDER BY total_amount DESC;
+
+SELECT * FROM vmotos_report
+
+CREATE OR REPLACE VIEW vmotos_report AS
+SELECT 
+	m.code_model, 
+	b.braname, 
+	m.modname, 
+	m.color, 
+	m.year, 
+	m.price, 
+	COALESCE(SUM(s.quantity), 0) AS total_sold, 
+	COALESCE(SUM(s.amount), 0) AS total_amount
+FROM tblSales s
+JOIN tblModel m ON s.code_model = m.code_model
+JOIN tblBrand b ON m.braid = b.braid
+GROUP BY m.code_model, b.braname, m.modname, m.color, m.year, m.price
+ORDER BY total_amount DESC;
+
+SELECT * FROM vmotos_report
+
+CREATE OR REPLACE VIEW vmotos_hard_to_sell AS
+SELECT 
     m.code_model, 
-    m.braname, 
+    b.braname, 
     m.modname, 
-    m.year,
-    s.saledate,
-    s.saleid,
-    COALESCE(s.amount, 0) AS sale_price
-FROM tblmotos m
-LEFT JOIN tblSales s ON m.code_model = s.code_model;
+    m.color, 
+    m.year, 
+    m.price, 
+    COALESCE(SUM(s.quantity), 0) AS total_sold, 
+    COALESCE(SUM(s.amount), 0) AS total_amount
+FROM tblmodel m
+JOIN tblbrand b ON m.braid = b.braid
+LEFT JOIN tblsales s ON m.code_model = s.code_model
+GROUP BY m.code_model, b.braname, m.modname, m.color, m.year, m.price
+HAVING total_sold < 1
+ORDER BY total_sold ASC;
+
+SELECT * FROM vmotos_hard_to_sell
+
+CREATE TABLE tbllogo 
+(
+id INT PRIMARY KEY AUTO_INCREMENT,
+shop VARCHAR(50) NOT NULL,
+logo VARCHAR(50)
+)
+
+INSERT INTO tbllogo(shop)
+VALUE
+('MotoShop MS')

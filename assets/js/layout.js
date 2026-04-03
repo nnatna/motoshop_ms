@@ -53,18 +53,3 @@
     init();
   }
 })();
-
-
-const links = document.querySelectorAll('#reportNav .nav-link');
-
-links.forEach(link => {
-  link.addEventListener('click', function (e) {
-    links.forEach(item => {
-      item.classList.remove('active');
-      item.classList.add('text-secondary');
-    });
-    this.classList.add('active');
-    this.classList.remove('text-secondary');
-  });
-});
-
