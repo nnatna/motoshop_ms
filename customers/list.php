@@ -1,3 +1,10 @@
+<?php
+require "db.php";
+if (isset($_GET['error'])) {
+    $error = $_GET['error'];
+}
+?>
+
 <div class="d-flex justify-content-between align-items-center mb-1">
     <div>
         <h3 class="fw-bold text-success"><i class="fa-solid fa-user-group me-1"></i>List Of Customers</h3>
@@ -25,6 +32,7 @@ $sel_address = ($field == "5") ? "selected" : "";
 ?>
 <fieldset>
     <form method="post" class="d-flex justify-content-between mb-3">
+
         <div class="text-start row g-3 align-items-center">
             <div class="col-auto">
                 <select name="txtfield" class="form-select shadow-none border-dark-subtle rounded-pill">
@@ -64,70 +72,72 @@ $sel_address = ($field == "5") ? "selected" : "";
         </div>
     </form>
 </fieldset>
-
+<?php if (isset($error)): ?>
+    <div class="alert alert-danger py-2 mx-4 text-center"><?php echo $error; ?></div>
+<?php endif; ?>
 <div class="card table-responsive bg-white rounded-4 p-3">
     <table id="Table" class="table table-hover align-middle">
-    <thead>
-        <tr class="table-secondary">
-            <th>ID</th>
-            <th>Name</th>
-            <th>Gender</th>
-            <th>Phone Number</th>
-            <th>Address</th>
-            <th class="text-center">Options</th>
-        </tr>
-    </thead>
-   <tbody>
-    <?php
-    require("db.php");
+        <thead>
+            <tr class="table-secondary">
+                <th>ID</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Phone Number</th>
+                <th>Address</th>
+                <th class="text-center">Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            require("db.php");
 
-    $limit = 10;
-    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-    $start = ($page - 1) * $limit;
-
-    
-    $where = "";
-    if (isset($_POST['btnsearch']) && !empty($_POST['txtfield']) && !empty($_POST['txtsearch'])) {
-        $field = $_POST['txtfield'];
-        $search = $_POST['txtsearch'];
-        $cols = ["1"=>"cusid", "2"=>"cusname", "3"=>"gender", "4"=>"phone", "5"=>"address"];
-        
-        if (array_key_exists($field, $cols)) {
-            $colName = $cols[$field];
-            $where = " WHERE $colName LIKE '%" . $conn->real_escape_string($search) . "%'";
-        }
-    }
-
-  
-    $order = " ORDER BY cusid DESC"; 
-    if ((isset($_POST['btnasc']) || isset($_POST['btndesc'])) && !empty($_POST['txtfield'])) {
-        $field = $_POST['txtfield'];
-        $cols = ["1"=>"cusid", "2"=>"cusname", "3"=>"gender", "4"=>"phone", "5"=>"address"];
-        
-        if (array_key_exists($field, $cols)) {
-            $sortType = isset($_POST['btnasc']) ? "ASC" : "DESC";
-            $order = " ORDER BY " . $cols[$field] . " $sortType";
-        }
-    }
-
-    
-    $total_query = $conn->query("SELECT COUNT(*) as total FROM tblCustomers $where");
-    $total_res = ($total_query) ? $total_query->fetch_assoc()['total'] : 0;
-    $pages = ceil($total_res / $limit);
+            $limit = 10;
+            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            $start = ($page - 1) * $limit;
 
 
-    $final_sql = "SELECT * FROM tblCustomers $where $order LIMIT $start, $limit";
-    $result = $conn->query($final_sql);
+            $where = "";
+            if (isset($_POST['btnsearch']) && !empty($_POST['txtfield']) && !empty($_POST['txtsearch'])) {
+                $field = $_POST['txtfield'];
+                $search = $_POST['txtsearch'];
+                $cols = ["1" => "cusid", "2" => "cusname", "3" => "gender", "4" => "phone", "5" => "address"];
 
-    if ($result && $result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            echo "<tr>";
-            echo "<td>#" . $row["cusid"] . "</td>";
-            echo "<td class='fw-medium'>" . $row["cusname"] . "</td>";
-            echo "<td>" . $row["gender"] . "</td>";
-            echo "<td>" . $row["phone"] . "</td>";
-            echo "<td>" . $row["address"] . "</td>";
-            echo "<td class='text-center'>
+                if (array_key_exists($field, $cols)) {
+                    $colName = $cols[$field];
+                    $where = " WHERE $colName LIKE '%" . $conn->real_escape_string($search) . "%'";
+                }
+            }
+
+
+            $order = " ORDER BY cusid DESC";
+            if ((isset($_POST['btnasc']) || isset($_POST['btndesc'])) && !empty($_POST['txtfield'])) {
+                $field = $_POST['txtfield'];
+                $cols = ["1" => "cusid", "2" => "cusname", "3" => "gender", "4" => "phone", "5" => "address"];
+
+                if (array_key_exists($field, $cols)) {
+                    $sortType = isset($_POST['btnasc']) ? "ASC" : "DESC";
+                    $order = " ORDER BY " . $cols[$field] . " $sortType";
+                }
+            }
+
+
+            $total_query = $conn->query("SELECT COUNT(*) as total FROM tblCustomers $where");
+            $total_res = ($total_query) ? $total_query->fetch_assoc()['total'] : 0;
+            $pages = ceil($total_res / $limit);
+
+
+            $final_sql = "SELECT * FROM tblCustomers $where $order LIMIT $start, $limit";
+            $result = $conn->query($final_sql);
+
+            if ($result && $result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr>";
+                    echo "<td>#" . $row["cusid"] . "</td>";
+                    echo "<td class='fw-medium'>" . $row["cusname"] . "</td>";
+                    echo "<td>" . $row["gender"] . "</td>";
+                    echo "<td>" . $row["phone"] . "</td>";
+                    echo "<td>" . $row["address"] . "</td>";
+                    echo "<td class='text-center'>
                 <a href='./customers/edit.php?cusid=" . $row["cusid"] . "' class='btn btn-outline-success rounded-circle'>
                 <i class='fa-solid fa-pen-to-square'></i>
                 </a>
@@ -135,14 +145,14 @@ $sel_address = ($field == "5") ? "selected" : "";
                 <i class='fa-solid fa-trash-can'></i>
                 </a>
             </td>";
-            echo "</tr>";
-        }
-    } else {
-        echo "<tr><td colspan='6' class='py-4 text-danger'>No records found!</td></tr>";
-    }
-    ?>
-</tbody>
-</table>
+                    echo "</tr>";
+                }
+            } else {
+                echo "<tr><td colspan='6' class='py-4 text-danger'>No records found!</td></tr>";
+            }
+            ?>
+        </tbody>
+    </table>
 </div>
 
 <?php include 'layout/Pagination.php'; ?>

@@ -7,54 +7,44 @@ if (isset($_SESSION['full_name'])) {;
 
 if (isset($_POST["submit"])) {
     require("../db.php");
-
-    $braid = isset($_POST["braid"]) ? $_POST["braid"] : null;
-    $braname = isset($_POST["braname"]) ? $_POST["braname"] : null;
-
-    if (empty($braid) && !empty($braname)) {
-        $sql_check = "SELECT braid FROM tblBrand WHERE braname = ?";
-        $stmt_check = $conn->prepare($sql_check);
-        $stmt_check->bind_param("s", $braname);
-        $stmt_check->execute();
-        $result_check = $stmt_check->get_result();
-
-        if ($row = $result_check->fetch_assoc()) {
-            $braid = $row["braid"];
-        } else {
-
-            $sql_ins_brand = "INSERT INTO tblBrand (braname) VALUES (?)";
-            $stmt_ins = $conn->prepare($sql_ins_brand);
-            $stmt_ins->bind_param("s", $braname);
-            $stmt_ins->execute();
-            $braid = $conn->insert_id;
-        }
+    $sql_check = "SELECT * FROM tblBrand WHERE braname=?";
+    $stmt_check = $conn->prepare($sql_check);
+    $stmt_check->bind_param("s", $_POST["braname"]);
+    $stmt_check->execute();
+    $result_check = $stmt_check->get_result();
+    if ($row_check = $result_check->fetch_assoc()) {
+        $braid = $row_check["braid"];
+    } else {
+        $error = "Brand not available yet!";
     }
-    $modname = $_POST["modname"];
-    $color   = $_POST["color"];
-    $year    = $_POST["year"];
-    $price   = $_POST["price"];
-    $act     = $_POST["act"];
-    $stock   = $_POST["stock"];
+    if (!isset($error)) {
+        $modname = $_POST["modname"];
+        $color   = $_POST["color"];
+        $year    = $_POST["year"];
+        $price   = $_POST["price"];
+        $act     = $_POST["act"];
+        $stock   = $_POST["stock"];
 
-    $sql = "INSERT INTO tblModel (braid, modname, color, `year`, price, act, stock) 
+        $sql = "INSERT INTO tblModel (braid, modname, color, `year`, price, act, stock) 
             VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("isssdsi", $braid, $modname, $color, $year, $price, $act, $stock);
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("isssdsi", $braid, $modname, $color, $year, $price, $act, $stock);
 
-    if ($stmt->execute()) {
-        $last_id = $conn->insert_id;
-        if (isset($_FILES['image']) && !empty($_FILES['image']['tmp_name'])) {
-            $extension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
-            $picture = $last_id . "." . $extension;
-            if (move_uploaded_file($_FILES['image']['tmp_name'], "../image/motorcycles/$picture")) {
-                $conn->query("UPDATE tblModel SET picture='$picture' WHERE code_model=$last_id");
+        if ($stmt->execute()) {
+            $last_id = $conn->insert_id;
+            if (isset($_FILES['image']) && !empty($_FILES['image']['tmp_name'])) {
+                $extension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+                $picture = $last_id . "." . $extension;
+                if (move_uploaded_file($_FILES['image']['tmp_name'], "../image/motorcycles/$picture")) {
+                    $conn->query("UPDATE tblModel SET picture='$picture' WHERE code_model=$last_id");
+                }
             }
+            header("Location: ../motos.php");
+            exit();
+        } else {
+            echo "Error: " . $conn->error;
         }
-        header("Location: ../motos.php");
-        exit();
-    } else {
-        echo "Error: " . $conn->error;
     }
 }
 ?>
@@ -69,8 +59,8 @@ if (isset($_POST["submit"])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/form.css?v=1.0">
-    <script src="../assets/js/form.js?v=1.0"></script>
+    <link rel="stylesheet" href="../assets/css/form.css?v=<?= time() ?>">
+    <script src="../assets/js/form.js?v=<?= time() ?>"></script>
 </head>
 
 <body>
@@ -80,6 +70,13 @@ if (isset($_POST["submit"])) {
                 <h3 class="text-center text-light fw-bold p-2">Add New Motorcycle</h3>
             </div>
             <form method="post" class="p-4" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <?php
+                    if (isset($error)) {
+                        echo "<div class='alert alert-danger p-1 text-center'>$error</div>";
+                    }
+                    ?>
+                </div>
                 <div class="mb-3">
                     <label for="brandInput" class="form-label text-muted fw-bold">Brand</label>
                     <input class="form-control shadow-none border-dark-subtle rounded-pill" list="brandList" id="brandInput" name="braname" placeholder="Select or type a brand..." required>
@@ -130,7 +127,8 @@ if (isset($_POST["submit"])) {
                     <input type="number" class="form-control shadow-none border-dark-subtle rounded-pill" id="stock" name="stock" placeholder="Enter stock" required>
                 </div>
 
-                <div class="mb-4 text-center border rounded-4 p-2 shadow-sm upload-zone" onclick="document.getElementById('image').click();" style="cursor: pointer;">
+                <div class="mb-4 text-center border rounded-4 p-2 shadow-sm upload-zone"
+                    onclick="document.getElementById('image').click();" style="cursor: pointer;">
                     <input type="file" class="d-none" id="image" name="image" onchange="showimg()" accept="image/*">
                     <div class="upload-zone-content">
                         <div id="uploadPlaceholder" class="p-2">

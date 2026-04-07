@@ -30,9 +30,11 @@ $res_stock = mysqli_query($conn, "SELECT SUM(stock) as total FROM tblmodel");
 $total_stock = mysqli_fetch_assoc($res_stock)['total'] ?? 0;
 
 $threshold = 5;
-$sql_low_stock = "SELECT COUNT(*) as total FROM tblmodel WHERE stock <= $threshold";
-$res_low_stock = mysqli_query($conn, $sql_low_stock);
-$low_stock_count = mysqli_fetch_assoc($res_low_stock)['total'] ?? 0;
+$sql_low_stock = "SELECT COUNT(*) as total FROM tblmodel WHERE stock <= ?";
+$stmt_low = $conn->prepare($sql_low_stock);
+$stmt_low->bind_param("i", $threshold);
+$stmt_low->execute();
+$low_stock_count = $stmt_low->get_result()->fetch_assoc()['total'] ?? 0;
 
 $sql_sold = "SELECT SUM(quantity) as total FROM tblsales
              WHERE saledate BETWEEN ? AND ?";

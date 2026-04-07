@@ -39,8 +39,8 @@ if (isset($_POST['btnsubmit'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="./assets/css/layout.css?v=1">
-    <script src="./assets/js/layout.js?v=1"></script>
-    <script src="./assets/js/form.js?v=1"></script>
+    <script src="./assets/js/layout.js<?php time() ?>"></script>
+    <script src="./assets/js/form.js<?php time() ?>"></script>
 </head>
 
 <body>

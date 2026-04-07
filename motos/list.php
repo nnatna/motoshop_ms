@@ -85,8 +85,7 @@ $act = $field == 6 ? "Selected" : "";
             $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
             $start = ($page - 1) * $limit;
 
-            $sql_base = " FROM tblModel m JOIN tblBrand b ON m.braid = b.braid";
-            $where = "";
+            $sql_base = " FROM tblModel m JOIN tblBrand b ON m.braid = b.braid"; $where = "";
 
             //search
             if (isset($_POST['btnsearch']) && !empty($_POST['txtfield']) && !empty($_POST['txtsearch'])) {
@@ -117,7 +116,7 @@ $act = $field == 6 ? "Selected" : "";
             $total_results = $conn->query("SELECT COUNT(*) as total " . $sql_base . $where)->fetch_assoc()['total'];
             $pages = ceil($total_results / $limit);
 
-            $sql = "SELECT m.code_model, b.braname, m.modname, m.color, m.year, m.price, m.act, m.stock, m.picture " . $sql_base . $where;
+            $sql = "SELECT m.code_model, b.braname, m.modname, m.color, m.year, m.price, m.act, m.stock, m.picture" . $sql_base . $where;
 
             //sort asc
             if (isset($_POST['btnasc'])) {

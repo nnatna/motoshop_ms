@@ -9,8 +9,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="./assets/css/layout.css?v=1">
-    <link rel="stylesheet" href="./assets/css/table.css?v=1">
+    <link rel="stylesheet" href="./assets/css/layout.css<?php time() ?>">
+    <link rel="stylesheet" href="./assets/css/table.css<?php time() ?>">
+    <script src="./assets/js/form.js<?php time() ?>"></script>
+    <script src="./assets/js/layout.js<?php time() ?>"></script>
 </head>
 
 <body>
@@ -64,7 +66,7 @@
                     </div>
                 </form>
             </div>
-            <div class="card bg-white p-3 rounded-4 mb-4">
+            <div class=" card bg-white p-3 rounded-4 mb-4">
                 <ul class="nav nav-pills d-flex justify-content-center gap-3" id="pills-tab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active px-4" id="pills-customer-tab" data-bs-toggle="pill" data-bs-target="#customer_report" type="button" role="tab">Customer Report</button>
