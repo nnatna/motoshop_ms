@@ -6,7 +6,7 @@
                 <th>ID</th>
                 <th>Full Name</th>
                 <th>Role</th>
-                <th>Total Sales</th>
+                <th>Total Sold</th>
                 <th>Total Amount</th>
             </tr>
         </thead>

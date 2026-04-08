@@ -80,6 +80,9 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link px-4" id="pills-sales-tab" data-bs-toggle="pill" data-bs-target="#hard_to_sell_report" type="button" role="tab">Hard To Sell Report</button>
                     </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link px-4" id="pills-sales-tab" data-bs-toggle="pill" data-bs-target="#low_stock_report" type="button" role="tab">Low Stock Report</button>
+                    </li>
                 </ul>
             </div>
             <div class="tab-content" id="pills-tabContent">
@@ -94,6 +97,9 @@
                 </div>
                 <div class="tab-pane fade" id="hard_to_sell_report" role="tabpanel">
                     <?php include 'reports/hard_to_sell_report.php'; ?>
+                </div>
+                <div class="tab-pane fade" id="low_stock_report" role="tabpanel">
+                    <?php include 'reports/low_stock_report.php'; ?>
                 </div>
             </div>
 

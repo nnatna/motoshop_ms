@@ -7,7 +7,7 @@
                 <th>Customer</th>
                 <th>Motorcycle</th>
                 <th>Qty</th>
-                <th>Amount</th>
+                <th>Total Amount</th>
                 <th>Seller</th>
             </tr>
         </thead>

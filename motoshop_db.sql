@@ -192,6 +192,21 @@ ORDER BY total_sold ASC;
 
 SELECT * FROM vmotos_hard_to_sell
 
+CREATE OR REPLACE VIEW v_low_stock_report AS
+SELECT
+    m.code_model,
+    b.braname, 
+    m.modname,
+    m.color,
+    m.year,
+    m.price,
+    m.stock
+FROM tblModel m
+JOIN tblbrand b ON m.braid = b.braid
+WHERE m.stock <= 5;
+
+SELECT * FROM v_low_stock_report;
+
 CREATE TABLE tbllogo 
 (
 id INT PRIMARY KEY AUTO_INCREMENT,

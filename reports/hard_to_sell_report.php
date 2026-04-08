@@ -29,7 +29,7 @@
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                     echo "<tr>";
-                    echo "<td>" . $row['code_model'] . "</td>";
+                    echo "<td>#" . $row['code_model'] . "</td>";
                     echo "<td class='fw-medium'>" . $row['braname'] . " " . $row['modname'] . " - " . $row['color'] . "</td>";
                     echo "<td>" . $row['year'] . "</td>";
                     echo "<td class='text-success fw-medium'>$" . number_format($row['price'], 2) . "</td>";

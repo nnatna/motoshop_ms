@@ -178,7 +178,7 @@ $act = $field == 6 ? "Selected" : "";
                 echo "<td><img src='image/motorcycles/" . $picture . "' alt='" . $row["modname"] . "' 
             class='img-thumbnail' style='width: 50px; height: 50px; object-fit: cover;'>
             </td>";
-                echo "<td>" . $row["code_model"] . "</td>";
+                echo "<td>#" . $row["code_model"] . "</td>";
                 echo "<td class='fw-medium'>" . $row["braname"] . " " . $row["modname"] . "</td>";
                 echo "<td>" . $row["color"] . "</td>";
                 echo "<td>" . $row["year"] . "</td>";
