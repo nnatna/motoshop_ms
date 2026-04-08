@@ -60,13 +60,13 @@ if (isset($_POST['btnsubmit'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit User</title>
+    <title>Update User</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/form.css<?php time() ?>">
-    <script src="../assets/js/form.js<?php time() ?>"></script>
+    <link rel="stylesheet" href="../assets/css/form.css?v=<?php echo time() ?>">
+    <script src="../assets/js/form.js?v=<?php echo time() ?>"></script>
 </head>
 
 <body>
@@ -74,7 +74,7 @@ if (isset($_POST['btnsubmit'])) {
     <div class="d-flex justify-content-center align-items-center vh-100">
         <div class="card rounded-4 shadow">
             <div class="bg-dark p-2 text-center m-0 rounded-top-4">
-                <h3 class="text-center text-light fw-bold p-2">Edit User</h3>
+                <h3 class="text-center text-light fw-bold p-2">Update User</h3>
             </div>
 
             <?php
@@ -126,20 +126,20 @@ if (isset($_POST['btnsubmit'])) {
                         </div>
                         <div class="mb-3">
                             <label for="username" class="form-label text-muted fw-bold">Username</label>
-                            <input type="text" class="form-control shadow border-dark-subtle rounded-pill" id="username" name="username" placeholder="Enter username"
+                            <input type="text" class="form-control shadow-none border-dark-subtle rounded-pill" id="username" name="username" placeholder="Enter username"
                                 value="<?php echo ($u) ?>" required>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label text-muted fw-bold">New Password</label>
-                            <input type="password" class="form-control shadow border-dark-subtle rounded-pill" id="password" name="password" placeholder="Enter new password">
+                            <input type="password" class="form-control shadow-none border-dark-subtle rounded-pill" id="password" name="password" placeholder="Enter new password">
                         </div>
                         <div class="mb-3">
                             <label for="cpassword" class="form-label text-muted fw-bold">Confirm New Password</label>
-                            <input type="password" class="form-control shadow border-dark-subtle rounded-pill" id="cpassword" name="cpassword" placeholder="Enter confirm new password">
+                            <input type="password" class="form-control shadow-none border-dark-subtle rounded-pill" id="cpassword" name="cpassword" placeholder="Enter confirm new password">
                         </div>
                         <div class="mb-3">
                             <label for="role" class="form-label text-muted fw-bold">Role</label>
-                            <select class="form-select shadow border-dark-subtlerounded-pill" id="role" name="role" required>
+                            <select class="form-select shadow-none border-dark-subtle rounded-pill" id="role" name="role" required>
                                 <?php
                                 $sql = "SELECT * FROM tbluser";
                                 if ($r == "Admin") {
@@ -165,7 +165,6 @@ if (isset($_POST['btnsubmit'])) {
             }
             ?>
         </div>
-    </div>
     </div>
 </body>
 

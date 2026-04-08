@@ -41,20 +41,20 @@ if (isset($_POST["submit"])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Sales Record</title>
+    <title>Update Sales Record</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/form.css<?php time() ?>">
-    <script src="../assets/js/form.js?v=1.0"></script>
+    <link rel="stylesheet" href="../assets/css/form.css?v=<?php echo time() ?>">
+    <script src="../assets/js/form.js?v=<?php echo time() ?>"></script>
 </head>
 
 <body>
     <div class="d-flex justify-content-center align-items-center vh-100">
         <div class="card rounded-4 shadow">
             <div class="bg-dark p-2 text-center m-0 rounded-top-4">
-                <h3 class="text-center p-2 text-light fw-bold">Edit Sales Record</h3>
+                <h3 class="text-center p-2 text-light fw-bold">Update Sales Record</h3>
             </div>
             <?php
             $sql = "SELECT s.*, c.cusname FROM tblSales s JOIN tblcustomers c ON s.cusid = c.cusid WHERE s.saleid = ?;";

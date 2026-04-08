@@ -34,6 +34,4 @@ if ($id) {
         header("Location: ../customer.php?error=" . urlencode($error));
         exit();
     }
-} else {
-    echo "No ID provided for deletion.";
 }

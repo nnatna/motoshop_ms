@@ -26,7 +26,7 @@ if (isset($_POST["submit"])) {
         }
         header("Location: ../motos.php");
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        $error = "Error updating record: ";
     }
 }
 ?>
@@ -36,20 +36,19 @@ if (isset($_POST["submit"])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Motorcycle</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <title>Update Motorcycle</title>
+    <link rel="stylesheet" href="../assets/bootstrap-5.3.8/css/bootstrap.min.css?v=<?php echo time() ?>">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/form.css?v=<?= time() ?>">
-    <script src="../assets/js/form.js?v=<?= time() ?>"></script>
+    <link rel="stylesheet" href="../assets/css/form.css?v=<?php echo time() ?>">
+    <script src="../assets/js/form.js?v=<?php echo time() ?>"></script>
 </head>
 
 <body>
     <div class="d-flex justify-content-center align-items-center vh-100">
         <div class="card rounded-4 shadow">
             <div class="bg-dark p-2 text-center m-0 rounded-top-4">
-                <h3 class="text-center p-2 text-light fw-bold">Edit Motorcycle</h3>
+                <h3 class="text-center p-2 text-light fw-bold">Update Motorcycle</h3>
             </div>
             <?php
             if (!isset($_POST["submit"])) {
@@ -70,7 +69,11 @@ if (isset($_POST["submit"])) {
                     $pic = $row["picture"];
             ?>
                     <form method="post" class="p-4" enctype="multipart/form-data">
-                        <input type="hidden" name="code_model" value="<?php echo $code_model; ?>">
+                        <?php if (isset($error)): ?>
+                            <div class="alert alert-danger text-center m-0" role="alert"><?php echo $error; ?></div>
+                        <?php endif; ?>
+                        <input type="hidden" name="code_model"
+                            value="<?php echo $code_model; ?>">
                         <div class="mb-3">
                             <label for="braid" class="form-label text-muted fw-bold">Brand</label>
                             <select class="form-select" id="braid" name="braid" required>

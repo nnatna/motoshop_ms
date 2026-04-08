@@ -5,14 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Moto Shop Management System</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../assets/bootstrap-5.3.8/css/bootstrap.min.css?v=<?php echo time() ?>">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="./assets/css/layout.css<?php time() ?>">
-    <link rel="stylesheet" href="./assets/css/table.css<?php time() ?>">
-    <script src="./assets/js/form.js<?php time() ?>"></script>
-    <script src="./assets/js/layout.js<?php time() ?>"></script>
+    <link rel="stylesheet" href="./assets/css/layout.css?v=<?php echo time() ?>">
+    <link rel="stylesheet" href="./assets/css/table.css?v=<?php echo time()?>">
+    <script src="./assets/js/form.js?v=<?php echo time() ?>"></script>
+    <script src="./assets/js/layout.js?v=<?php echo time() ?>"></script>
 </head>
 
 <body>
@@ -66,7 +65,7 @@
                     </div>
                 </form>
             </div>
-            <div class=" card bg-white p-3 rounded-4 mb-4">
+            <div class="card bg-white p-3 rounded-4 mb-4">
                 <ul class="nav nav-pills d-flex justify-content-center gap-3" id="pills-tab" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active px-4" id="pills-customer-tab" data-bs-toggle="pill" data-bs-target="#customer_report" type="button" role="tab">Customer Report</button>
