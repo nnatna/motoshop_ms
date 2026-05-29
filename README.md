@@ -1,79 +1,71 @@
-# [Project Name]
+# Moto Shop Management System
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-A concise, one-sentence description of what this project does and the problem it solves.
+A comprehensive PHP-based management solution designed for motorcycle dealerships to streamline inventory tracking, customer relationships, and administrative tasks.
 
 ---
 
 ## 🚀 Features
 
-- **Feature 1**: High-level explanation of a key capability.
-- **Feature 2**: Description of another important functionality.
-- **Performance**: Optimized for [speed/memory/concurrency].
-- **Extensibility**: Easily pluggable architecture for custom modules.
+- **Inventory Management**: Track and manage motorcycle stock with specialized listing modules.
+- **Customer CRM**: Maintain a centralized database of customer information and interaction history.
+- **User Administration**: Role-based access and user management for shop employees.
+- **Settings & Profile**: Personalized user settings and system configuration panel.
+- **Responsive Design**: Built with Bootstrap 5 to ensure compatibility across desktops, tablets, and mobile devices.
 
 ## 🛠 Tech Stack
 
-- **Language**: [e.g., Go, TypeScript, Python]
-- **Frameworks**: [e.g., React, FastAPI, Gin]
-- **Database**: [e.g., PostgreSQL, Redis]
-- **Infrastructure**: [e.g., Docker, Kubernetes, AWS]
+- **Server-side**: PHP
+- **Frontend Framework**: Bootstrap 5.3.8
+- **Icons**: FontAwesome 6.5.1 & Bootstrap Icons 1.11.3
+- **Styling**: Custom CSS Layouts
 
 ## 📦 Getting Started
 
 ### Prerequisites
 
 Ensure you have the following installed:
-- [Language Runtime, e.g., Node.js >= 18]
-- [Package Manager, e.g., npm, poetry, or go modules]
-- [Tooling, e.g., Docker]
+- **Web Server**: XAMPP, WAMP, or Laragon (Apache)
+- **PHP**: Version 8.0+ (Recommended)
+- **Database**: MySQL 5.7+
 
 ### Installation
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/username/project-name.git
-   cd project-name
+   git clone https://github.com/nnatna/motoshop_ms.git
+   cd motoshop_ms
    ```
 
-2. **Install dependencies:**
-   ```bash
-   # Example for npm
-   npm install
-   ```
+2. **Database Setup (MySQL):**
+   - Open phpMyAdmin or your MySQL client.
+   - Create a new database named `motoshop_db`.
+   - Import the provided SQL schema file (usually found in a `/database` or `/sql` folder).
 
-3. **Set up environment variables:**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your local configuration
-   ```
+3. **Database Configuration:**
+   - Edit `db.php` in the root directory:
+     ```php
+     $conn = mysqli_connect("localhost", "username", "password", "motoshop_db");
+     ```
 
-4. **Run the project:**
-   ```bash
-   npm run dev
+4. **Run Project:**
+   - Move the folder to your `htdocs` or `www` directory.
+   - Visit `http://localhost/motoshop_ms` in your browser.
    ```
 
 ## 📖 Usage
 
-Provide basic examples of how to use the project.
+1. **Login**: Access the system using your staff credentials.
+2. **Inventory**: Add new motorcycles via the "Motorcycles" sidebar link.
+3. **Reports**: Use the Reports section to filter transactions by date and print results.
 
-```javascript
-// Example code snippet
-const project = require('project-name');
-project.initialize();
-```
+## 📂 Project Structure
 
-For detailed documentation, please refer to the [docs](./docs) directory.
-
-## 🧪 Running Tests
-
-Keep your codebase healthy by running the test suite regularly.
-
-```bash
-npm test
-```
+- `/layout`: Contains `header.php`, `sidebar.php`, and `footer.php`.
+- `/assets`: Custom CSS/JS with cache-busting logic.
+- `/reports`, `/motos`, `/user`: Module-specific view and logic files.
 
 ## 🤝 Contributing
 
@@ -91,6 +83,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## ✉️ Contact
 
-Your Name - @your_twitter - email@example.com
+Your Name - ngelratanaa@gmail.com
 
-Project Link: https://github.com/username/project-name
+Project Link: https://github.com/username/motoshop_ms
