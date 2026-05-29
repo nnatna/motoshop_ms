@@ -121,7 +121,7 @@ if (isset($_POST['btnsubmit'])) {
                         </div>
                         <div class="mb-3">
                             <label for="full_name" class="form-label text-muted fw-bold">Full Name</label>
-                            <input type="text" class="form-control shadow border-dark-subtle rounded-pill" id="full_name" name="full_name" placeholder="Enter full name"
+                            <input type="text" class="form-control shadow-none border-dark-subtle rounded-pill" id="full_name" name="full_name" placeholder="Enter full name"
                                 value="<?php echo ($f) ?>" required>
                         </div>
                         <div class="mb-3">
