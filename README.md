@@ -83,6 +83,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## ✉️ Contact
 
-Your Name - skyerkh@gmail.com
+Email - skyerkh@gmail.com & ngelratanaa@gmail.com
 
 Project Link: https://github.com/username/motoshop_ms
